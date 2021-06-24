@@ -32,7 +32,6 @@ export class UserService {
     }
     this.user_id = localStorage.getItem('uid')? parseInt(<string>localStorage.getItem('uid')) : null;
     this.user_name = localStorage.getItem('uname')? localStorage.getItem('uname') : null;
-
     if (!this.user_id){this.authenticated=false;}
 
   }
@@ -71,6 +70,7 @@ export class UserService {
   }
   profile(){
     if (!this.authenticated){return;}
-
   }
+
+  register(){}
 }
