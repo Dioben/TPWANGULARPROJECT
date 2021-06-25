@@ -29,10 +29,13 @@ export class UserauthComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  private register(){
-    if (this.registerPassword2!=this.registerPassword1){this.message="Passwords do not match";return;}
-    this.state=states.REGISTER_WAITING;
-    this.userService.register(this.registerName,this.registerPassword1,this.registerPassword2,this.registerEmail).subscribe(value => this.handleRegister(value));
+  public async register() {
+    if (this.registerPassword2 != this.registerPassword1) {
+      this.message = "Passwords do not match";
+      return;
+    }
+    this.state = states.REGISTER_WAITING;
+    this.handleRegister(await this.userService.register(this.registerName, this.registerPassword1, this.registerPassword2, this.registerEmail));
   }
   private handleRegister(value:boolean){
     if (!value){
@@ -45,11 +48,11 @@ export class UserauthComponent implements OnInit {
     }
   }
 
-  private login() {
+  public login() {
     this.state=states.LOGIN_WAITING;
     this.userService.login(this.username,this.password);
   }
-  private logout(){
+  public logout(){
     this.userService.logout();
   }
 
@@ -65,7 +68,7 @@ export class UserauthComponent implements OnInit {
       }
         }
   }
-  private toggleDropdown(){//dropdown disappears while authenticated or waiting
+  public toggleDropdown(){//dropdown disappears while authenticated or waiting
     switch (this.state){
       case states.CLOSED_LOGIN:{this.state=states.LOGIN;break;}
       case states.LOGIN:{this.state=states.CLOSED_LOGIN;break;}
@@ -73,10 +76,10 @@ export class UserauthComponent implements OnInit {
       case states.REGISTER:{this.state=states.CLOSED_REGISTER;break;}
     }
   }
-  private goToRegister(){
+  public goToRegister(){
     this.state = states.REGISTER;
   }
-  private goToLogin(){
+  public goToLogin(){
     this.state = states.LOGIN;
   }
 }

@@ -38,7 +38,7 @@ export class UserService {
   }
 
   login(username:string, password:string):void{
-    let url:string = BASE_DJANGO_URL+"/auth/login/";
+    let url:string = BASE_DJANGO_URL+"auth/login/";
     this.http.post<{key:string}>(url,{"username":username,"password":password}, this.httpOptions).subscribe(value =>this.loadUserInfo(value))
 
   }
@@ -47,7 +47,7 @@ export class UserService {
     let token:string = value["key"];
   if (!token){this.authenticatedChange.next(false); return;}
     this.httpOptions = {headers : new HttpHeaders({"Content-Type":"application/json","Authorization": "Token "+token})};
-    let url:string = BASE_DJANGO_URL+"/auth/user/";
+    let url:string = BASE_DJANGO_URL+"auth/user/";
     this.http.get<User>(url,this.httpOptions).subscribe(value1 => this.finalizeLogin(value1,token));
   }
 
@@ -86,21 +86,22 @@ export class UserService {
     if (password1 != password2) {
       return false;
     }
-    let url = BASE_DJANGO_URL + "exists/"
+    let url = BASE_DJANGO_URL + "exists/";
     let exists: boolean = await this.http.post<boolean>(url, {
       name: username,
       email: email
     }, this.httpOptions).toPromise();
+    console.log(exists)
     if (exists) {
       return false;
     }
     url = BASE_DJANGO_URL + "auth/registration/";
-    this.http.post(url, {
+    await this.http.post(url, {
       username: username,
       email: email,
       password1: password1,
       password2: password2
-    }, this.httpOptions);
+    }, this.httpOptions).toPromise();
     return true;
 
 

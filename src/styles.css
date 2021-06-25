@@ -95,6 +95,8 @@ body {
 
 .forgot {
   margin-top: 3px;
+  color: dodgerblue;
+  cursor: pointer;
 }
 
 .pagination {
