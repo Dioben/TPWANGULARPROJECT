@@ -1,5 +1,5 @@
 export class Chapter{
-  id: number;
+  id!: number;
   book_name!: string;
   title?: string;
   text?: string;

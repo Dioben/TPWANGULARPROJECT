@@ -35,7 +35,7 @@ export class BookService {
   editBook(book:Book):Observable<any>{
     if(book.author!=this.auth.user_id){throw new Error("You are not this book's author");}
     let url:string=BASE_DJANGO_URL+"editBook/";
-    return this.http.post(url,book,this.auth.httpOptions);
+    return this.http.put(url,book,this.auth.httpOptions);
   }
   deleteBook(book:Book){
     if(book.author!=this.auth.user_id){throw new Error("You are not this book's author");}
