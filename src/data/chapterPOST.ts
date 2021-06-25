@@ -3,4 +3,5 @@ export class ChapterPOST{
   title!:string;
   text!:string;
   novel!:number;
+
 }
