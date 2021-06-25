@@ -3,7 +3,7 @@ export class Comment{
   author_name!: string;
   content!: string;
   release?: string;
-  author?: 2;
-  chapter?: 1;
+  author?: number;
+  chapter?: number;
   parent!: number|null;
 }

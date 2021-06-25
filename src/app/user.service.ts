@@ -43,19 +43,22 @@ export class UserService {
 
   }
 
-  loadUserInfo(value: {key:string}) {
+  private loadUserInfo(value: {key:string}) {
     let token:string = value["key"];
   if (!token){this.authenticatedChange.next(false); return;}
     this.httpOptions = {headers : new HttpHeaders({"Content-Type":"application/json","Authorization": "Token "+token})};
     let url:string = BASE_DJANGO_URL+"/auth/user/";
-    this.http.get<User>(url,this.httpOptions).subscribe(value1 => this.finalizeLogin(value1));
+    this.http.get<User>(url,this.httpOptions).subscribe(value1 => this.finalizeLogin(value1,token));
   }
 
-  finalizeLogin(user:User){
+  private finalizeLogin(user:User,token:string){
     if (user){
       this.user_id=user.pk;
       this.user_name=user.username!;
       this.authenticated=true;
+      localStorage.setItem("token",token);
+      localStorage.setItem("uid",String(user.pk));
+      localStorage.setItem("uname",<string>user.username);
       this.authenticatedChange.next(true);
     }else{
       this.authenticatedChange.next(false);
@@ -79,16 +82,26 @@ export class UserService {
     return this.http.get<ProfileView>(url,this.httpOptions);
   }
 
-  register(username: string, password1: string, password2: string, email: string): Observable<boolean> {
+  async register(username: string, password1: string, password2: string, email: string): Promise<boolean> {
     if (password1 != password2) {
-      return new Observable<boolean>(subscriber => {subscriber.next(false)});
+      return false;
     }
     let url = BASE_DJANGO_URL + "exists/"
-    let exists = this.http.post<boolean>(url, {name: username, email: email}, this.httpOptions).toPromise();
-    if (exists){return new Observable<boolean>(subscriber => {subscriber.next(false)});}
-    url = BASE_DJANGO_URL + "auth/registration/"
-    this.http.post(url,{username:username,email:email,password1:password1,password2:password2},this.httpOptions);
-    return new Observable<boolean>(subscriber => {subscriber.next(true)});
+    let exists: boolean = await this.http.post<boolean>(url, {
+      name: username,
+      email: email
+    }, this.httpOptions).toPromise();
+    if (exists) {
+      return false;
+    }
+    url = BASE_DJANGO_URL + "auth/registration/";
+    this.http.post(url, {
+      username: username,
+      email: email,
+      password1: password1,
+      password2: password2
+    }, this.httpOptions);
+    return true;
 
 
   }

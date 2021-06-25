@@ -1,6 +1,6 @@
 export class CommentPOST{
   id?:number;
   content!: string;
-  chapter!: 1;
+  chapter!: number;
   parent!: number|null;
 }
