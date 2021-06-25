@@ -11,6 +11,8 @@ import { ChapterEditorComponent } from './chapter-editor/chapter-editor.componen
 import { OverviewComponent } from './overview/overview.component';
 import { ListingComponent } from './listing/listing.component';
 import { ProfileComponent } from './profile/profile.component';
+import {HttpClientModule} from "@angular/common/http";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { ProfileComponent } from './profile/profile.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

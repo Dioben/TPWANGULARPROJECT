@@ -1,1 +1,71 @@
-<p>userauth works!</p>
+<div *ngIf="state != 6" class="btn-group h-100">
+    {{state}}
+    <button type="button" class="btn btn-link dropdown-toggle btn-sm login mt-0"
+            (click)="toggleDropdown()">
+        Login
+    </button>
+    <div *ngIf="state == 2" class="dropdown-menu dropdown-menu-right" style="min-width: 300px; color: #CBCBCB; display: block;">
+        <h5 style="margin-left: 15px; font-weight: bold;">Login</h5>
+        <div class="dropdown-divider mb-0"></div>
+        <div style="padding: 15px;">
+            <div *ngIf="message != ''" class="alert alert-danger">
+                {{message}}
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="login-username-input">Username:</label>
+                <input [(ngModel)]="username" class="form-control" id="login-username-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="login-password-input">Password:</label>
+                <input [(ngModel)]="password" class="form-control" type="password" id="login-password-input">
+            </div>
+            <div class="form-group" style="margin: 5px 0 5px 0">
+                <button class="btn btn-primary btn-block" (click)="login()">Log in</button>
+            </div>
+            <div class="d-flex justify-content-center">
+                <span class="forgot" (click)="goToRegister()">Create a new account</span>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="state == 3" class="dropdown-menu dropdown-menu-right" style="min-width: 300px; color: #CBCBCB; display: block;">
+        <h5 style="margin-left: 15px; font-weight: bold;">Register</h5>
+        <div class="dropdown-divider mb-0"></div>
+        <div style="padding: 15px;">
+            <div *ngIf="message != ''" class="alert alert-danger">
+                {{message}}
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="register-username-input">Username:</label>
+                <input [(ngModel)]="registerName" class="form-control" id="register-username-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="register-email-input">Email:</label>
+                <input [(ngModel)]="registerEmail" type="email" class="form-control" id="register-email-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="register-password1-input">Password:</label>
+                <input [(ngModel)]="registerPassword1" class="form-control" type="password" id="register-password1-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="register-password2-input">Confirm password:</label>
+                <input [(ngModel)]="registerPassword2" class="form-control" type="password" id="register-password2-input">
+            </div>
+            <div class="form-group d-flex" style="margin: 5px 0 5px 0">
+                <button class="btn btn-primary btn-block" (click)="register()">Sign Up</button>
+            </div>
+            <div class="d-flex justify-content-center">
+                <span class="forgot" (click)="goToLogin()">Already have an account? Log in.</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="state == 6" class="btn-group h-100">
+    <button type="button" class="btn btn-link dropdown-toggle btn-sm login mt-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+       {{username}}<i class="fa fa-user"></i>
+    </button>
+    <div class="dropdown-menu dropdown-menu-right">
+        <a class="dropdown-item" type="button" routerLink="/profile">Profile</a>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item" (click)="logout()">Logout</button>
+    </div>
+</div>
