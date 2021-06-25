@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from "../user.service";
 
+
+enum states {CLOSED_LOGIN,CLOSED_REGISTER,LOGIN,REGISTER,LOGIN_WAITING,REGISTER_WAITING,AUTHENTICATED};
 @Component({
   selector: 'app-userauth',
   templateUrl: './userauth.component.html',
   styleUrls: ['./userauth.component.css']
 })
 
-enum states {CLOSED_LOGIN,CLOSED_REGISTER,LOGIN,REGISTER,LOGIN_WAITING,REGISTER_WAITING,AUTHENTICATED};
 export class UserauthComponent implements OnInit {
 
   username: string="";
