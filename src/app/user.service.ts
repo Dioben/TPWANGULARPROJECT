@@ -82,16 +82,26 @@ export class UserService {
     return this.http.get<ProfileView>(url,this.httpOptions);
   }
 
-  register(username: string, password1: string, password2: string, email: string): Observable<boolean> {
+  async register(username: string, password1: string, password2: string, email: string): Promise<boolean> {
     if (password1 != password2) {
-      return new Observable<boolean>(subscriber => {subscriber.next(false)});
+      return false;
     }
     let url = BASE_DJANGO_URL + "exists/"
-    let exists = this.http.post<boolean>(url, {name: username, email: email}, this.httpOptions).toPromise();
-    if (exists){return new Observable<boolean>(subscriber => {subscriber.next(false)});}
-    url = BASE_DJANGO_URL + "auth/registration/"
-    this.http.post(url,{username:username,email:email,password1:password1,password2:password2},this.httpOptions);
-    return new Observable<boolean>(subscriber => {subscriber.next(true)});
+    let exists: boolean = await this.http.post<boolean>(url, {
+      name: username,
+      email: email
+    }, this.httpOptions).toPromise();
+    if (exists) {
+      return false;
+    }
+    url = BASE_DJANGO_URL + "auth/registration/";
+    this.http.post(url, {
+      username: username,
+      email: email,
+      password1: password1,
+      password2: password2
+    }, this.httpOptions);
+    return true;
 
 
   }
