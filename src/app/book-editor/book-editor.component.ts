@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {UserService} from "../user.service";
-import {Location} from "@angular/common";
+import {Component, Input, OnInit, Output,EventEmitter} from '@angular/core';
 import {Book} from "../../data/book";
-import {ProfileView} from "../../data/profileView";
+import {BookService} from "../book.service";
+import {catchError} from "rxjs/operators";
+
 
 @Component({
   selector: 'app-book-editor',
@@ -11,25 +10,16 @@ import {ProfileView} from "../../data/profileView";
   styleUrls: ['./book-editor.component.css']
 })
 export class BookEditorComponent implements OnInit {
-  bookmarks?: Book[];
-  published?: Book[];
-  constructor(private route:ActivatedRoute,private auth:UserService,private location:Location) { }
+
+  @Input("book") book!:Book;
+  message:string="";
+  @Output() bookEditEvent = new EventEmitter<Book>();
+  constructor(private service:BookService) { }
 
   ngOnInit(): void {
-    if (!this.auth.authenticated){this.location.back();}
-    this.auth.profile().subscribe(value => this.loadProfile(value))
-    this.auth.authenticatedChange.subscribe(value => this.onAuthChange(value));
-
   }
-  private loadProfile(value: ProfileView) {
-    this.bookmarks=value.bookmarks;
-    this.published=value.books;
 
-  }
-  private onAuthChange(value:boolean){
-    if (!value){this.location.back();return;}
-    else{
-      this.auth.profile().subscribe(value => this.loadProfile(value)); //I don't think this will ever happen
-    }
+  submit(){
+    this.service.editBook(this.book).subscribe(value => {this.bookEditEvent.emit(this.book)},error => {this.message="Failed to submit update"});
   }
 }

@@ -91,7 +91,6 @@ export class UserService {
       name: username,
       email: email
     }, this.httpOptions).toPromise();
-    console.log(exists)
     if (exists) {
       return false;
     }

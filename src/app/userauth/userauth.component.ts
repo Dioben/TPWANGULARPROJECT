@@ -39,7 +39,6 @@ export class UserauthComponent implements OnInit {
     this.handleRegister(await this.userService.register(this.registerName, this.registerPassword1, this.registerPassword2, this.registerEmail));
   }
   private handleRegister(value:boolean){
-    console.log("handling" +value);
     if (!value){
       this.state=states.REGISTER;
       this.message="username or email is taken";
