@@ -11,7 +11,7 @@ enum states {CLOSED_LOGIN,CLOSED_REGISTER,LOGIN,REGISTER,LOGIN_WAITING,REGISTER_
 
 export class UserauthComponent implements OnInit {
 
-  username: string="";
+  username: string|null="";
   password: string="";
   registerName:string="";
   registerPassword1:string="";
@@ -22,6 +22,7 @@ export class UserauthComponent implements OnInit {
   constructor(private userService:UserService) {
     if (userService.authenticated){
       this.state=states.AUTHENTICATED;
+      this.username=userService.user_name;
     }else{this.state=states.CLOSED_LOGIN}
     userService.authenticatedChange.subscribe(value => this.handleAuthChange(value));
   }
@@ -38,6 +39,7 @@ export class UserauthComponent implements OnInit {
     this.handleRegister(await this.userService.register(this.registerName, this.registerPassword1, this.registerPassword2, this.registerEmail));
   }
   private handleRegister(value:boolean){
+    console.log("handling" +value);
     if (!value){
       this.state=states.REGISTER;
       this.message="username or email is taken";
@@ -50,7 +52,7 @@ export class UserauthComponent implements OnInit {
 
   public login() {
     this.state=states.LOGIN_WAITING;
-    this.userService.login(this.username,this.password);
+    this.userService.login(this.username!,this.password);
   }
   public logout(){
     this.userService.logout();
