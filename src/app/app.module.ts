@@ -13,6 +13,7 @@ import { ListingComponent } from './listing/listing.component';
 import { ProfileComponent } from './profile/profile.component';
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
+import { NotfoundComponent } from './notfound/notfound.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import {FormsModule} from "@angular/forms";
     ChapterEditorComponent,
     OverviewComponent,
     ListingComponent,
-    ProfileComponent
+    ProfileComponent,
+    NotfoundComponent
   ],
   imports: [
     BrowserModule,
