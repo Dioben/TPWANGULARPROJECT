@@ -10,6 +10,9 @@ import {OverviewComponent} from "./overview/overview.component";
 import {NotfoundComponent} from "./notfound/notfound.component";
 
 const routes: Routes = [
+  {path: 'hot', component: ListingComponent},
+  {path: 'new', component: ListingComponent},
+  {path: 'top', component: ListingComponent},
   {path: 'hot/:page', component: ListingComponent},
   {path: 'new/:page', component: ListingComponent},
   {path: 'top/:page', component: ListingComponent},
