@@ -12,19 +12,19 @@ import {UserService} from "./user.service";
 export class ListingService {
 
   constructor(private http:HttpClient,private auth:UserService) {}
-  hot(page:number):Observable<BookListingView>{
+  hot(page:number=1):Observable<BookListingView>{
     let url:string= BASE_DJANGO_URL+"hot/"+page+"/";
     return this.http.get<BookListingView>(url,this.auth.httpOptions);
   }
-  top(page:number):Observable<BookListingView>{
+  top(page:number=1):Observable<BookListingView>{
     let url:string= BASE_DJANGO_URL+"top/"+page+"/";
     return this.http.get<BookListingView>(url,this.auth.httpOptions);
   }
-  new(page:number):Observable<ChapterListingView>{
+  new(page:number=1):Observable<ChapterListingView>{
     let url:string= BASE_DJANGO_URL+"new/"+page+"/";
     return this.http.get<ChapterListingView>(url,this.auth.httpOptions);
   }
-  search(query:string,page:number):Observable<BookListingView>{
+  search(query:string,page:number=1):Observable<BookListingView>{
     let url:string= BASE_DJANGO_URL+"search/"+query+"/"+page+"/";
     return this.http.get<BookListingView>(url,this.auth.httpOptions);
   }
