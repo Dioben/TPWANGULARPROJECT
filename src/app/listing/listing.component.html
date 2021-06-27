@@ -1,1 +1,67 @@
-<p>listing works!</p>
+<ng-template #noReviews> <span>No reviews yet!</span></ng-template>
+<div class="row no-gutters">
+  <div class="col-xl-12 offset-xl-0">
+    <div class="container-custom">
+      <div class="container-custom-header">
+        <span>{{headerMessage}}</span>
+        <div class="separator"></div>
+      </div>
+      <!-- BOOKS HERE> <-->
+      <div class="list-content" *ngIf="type!='new'">
+        <div *ngFor="let book of books">
+          <div class="d-flex flex-nowrap">
+            <img src="{{book.cover}}">
+            <div class="col d-flex flex-column">
+              <a routerLink="/book/{{ book.id }}/"><b>{{ book.title }}</b></a>
+              <div class="d-flex justify-content-between" *ngIf="book.reviewcount && book.scoretotal!==undefined; else noReviews" >
+                <span>Score: {{ book.scoretotal/book.reviewcount}}/100</span>
+              </div>
+              <span class="mt-3 description">{{ book.description }}</span>
+            </div>
+          </div>
+          <div class="separator"></div>
+        </div>
+      </div>
+      <!-- CHAPTERS HERE> <-->
+      <div class="list-content" *ngIf="type=='new'">
+        <div *ngFor="let chapter of chapters">
+          <div class="d-flex flex-nowrap">
+            <img src="{{chapter.book_cover}}">
+            <div class="col d-flex flex-column">
+              <a routerLink="/book/{{ chapter.novel }}/"><b>{{ chapter.book_name }}</b></a>
+              <a routerLink="/chapter/{{ chapter.novel }}/{{ chapter.number }}/">{{ chapter.title }}</a>
+            </div>
+            </div>
+          </div>
+          <div class="separator"></div>
+        </div>
+      </div>
+    </div>
+  <div class="col-xl-12 offset-xl-0">
+    <nav aria-label="pagination">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" *ngIf="page!=1">
+          <a class="page-link" routerLink="/{{type}}/1/{{type=='search'?'?title='+query:''}}"> tabindex="-1">First</a>
+        </li>
+        <li class="page-item" *ngIf="page>3"> <!--gotta be at page 4 at least><-->
+          <a class="page-link" routerLink="/{{ type }}/{{ page-2}}/{{type=='search'?'?title='+query:''}}">{{ page-2 }}</a>
+        </li>
+        <li class="page-item" *ngIf="page>2"> <!--gotta be at page 3 at least><-->
+          <a class="page-link" routerLink="/{{ type }}/{{ page-1 }}/{{type=='search'?'?title='+query:''}}">{{ page-1 }}</a>
+        </li>
+        <li class="page-item active">
+          <a class="page-link">{{ page }}</a>
+        </li>
+        <li class="page-item" *ngIf="totalpages>page+1"> <!--still got 1 page before LAST><-->
+          <a class="page-link" routerLink="/{{ type }}/{{ page+1 }}/{{type=='search'?'?title='+query:''}}">{{ page+1 }}</a>
+        </li>
+        <li class="page-item" *ngIf="totalpages>page+2"> <!--still got 2 page before LAST><-->
+          <a class="page-link" routerLink="/{{ type }}/{{ page+2 }}/{{type=='search'?'?title='+query:''}}">{{ page+2 }}</a>
+        </li>
+        <li class="page-item" *ngIf="page!=totalpages">
+          <a class="page-link" routerLink="/{{ type }}/{{ totalpages }}/{{type=='search'?'?title='+query:''}}">Last</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
