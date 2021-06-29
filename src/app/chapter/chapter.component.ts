@@ -14,8 +14,9 @@ export class ChapterComponent implements OnInit {
   loggedin:boolean; //allow comment
   isauthor:boolean=false; //allow edit
   chapter?:ChapterFullView;
-  chapterId?:number;
+  authorId?:number;
   comments?:Comment[];
+  bookId?:number;
   page:number=1;
   constructor(private auth:UserService,private route:ActivatedRoute,private location:Location,private chapterService:ChapterService) {
     this.loggedin=auth.authenticated;
@@ -23,12 +24,18 @@ export class ChapterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadChapter();
   }
 
   private handleLoginChange(value: boolean) {
     this.loggedin=value;
     if (this.loggedin){
-      this.isauthor = this.auth.user_id==this.bookId
+      this.isauthor = this.auth.user_id==this.authorId;
     }
+  }
+
+  private loadChapter() {
+    if (!this.route.snapshot.paramMap.get('book')){this.location.back();return;} //don't even try if no book
+
   }
 }
