@@ -68,7 +68,7 @@
         {% if not comment.parent %}
         <div class="d-flex flex-column" *ngFor="let commentlayer1 of outercomments" >
           <div class="d-flex justify-content-between">
-            <span><b>{{ commentlayer1.author }}</b></span>
+            <span><b>{{ commentlayer1.author_name }}</b></span>
             <span><small>{{ commentlayer1.release }}</small></span>
           </div>
           <div class="mt-1">
@@ -83,15 +83,15 @@
             <form method="post" action="/comment/">
               <p>fuck you i'm the replying form</p>
               <div class="d-flex justify-content-end mb-2">
-                <button type="submit" class="btn btn-primary {{loggedin? 'disabled':''}}">Post</button>
+                <button type="submit" class="btn btn-primary {{loggedin? 'disabled':'' }}">Post</button>
               </div>
             </form>
           </div>
           <div class="comment-children">
             <div class="d-flex flex-column" *ngFor="let childcomment of innercomments" >
-              <div *ngIf="commentlayer1.id==childcomment.parent"> <!--- >added this in, maybe it messes with formatting ,idk <-->
+              <div *ngIf="commentlayer1.id==childcomment.parent"><!--- >added this in, maybe it messes with formatting ,idk<-->
               <div class="d-flex justify-content-between">
-                <span><b>{{ childcomment.author }}</b></span>
+                <span><b>{{ childcomment.author_name }}</b></span>
                 <span><small>{{ childcomment.release }}</small></span>
               </div>
               <div class="mt-1">
