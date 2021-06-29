@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import {ChapterFullView} from "../../data/chapterFullView";
+import {UserService} from "../user.service";
+import {ActivatedRoute} from "@angular/router";
+import {Location} from "@angular/common";
+import {ChapterService} from "../chapter.service";
+import {Comment} from "../../data/comment";
 
 @Component({
   selector: 'app-chapter',
@@ -6,10 +12,69 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chapter.component.css']
 })
 export class ChapterComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
+  loggedin:boolean; //allow comment
+  isauthor:boolean=false; //allow edit
+  chapter?:ChapterFullView;
+  chapterNum?:number;
+  authorId?:number;
+  bookId?:number;
+  page:number=1;
+  maxpages:number=1;
+  outercomments?: Comment[];
+  innercomments?:Comment[];
+  userId: number|null;
+  constructor(private auth:UserService,private route:ActivatedRoute,private location:Location,private chapterService:ChapterService) {
+    this.loggedin=auth.authenticated;
+    if (auth.authenticated){this.userId=auth.user_id;}else{this.userId=null;}
+    auth.authenticatedChange.subscribe(value => this.handleLoginChange(value));
   }
 
+  ngOnInit(): void {
+    this.loadChapter();
+  }
+
+  private handleLoginChange(value: boolean) {
+    this.loggedin=value;
+    if (this.loggedin){
+      this.isauthor = this.auth.user_id==this.authorId;
+      this.userId=this.auth.user_id;
+    }else {this.userId=null;}
+  }
+
+  private loadChapter() {
+    if (!this.route.snapshot.paramMap.get('book')){this.location.back();return;} //don't even try if no book, if book ids werent unable to be 0 this would suck
+    this.bookId = +this.route.snapshot.paramMap.get('book')!;
+    if (this.route.snapshot.paramMap.get('number')){
+      this.chapterNum = +this.route.snapshot.paramMap.get('number')!;
+    }
+    else{this.chapterNum=1;}
+    if (this.route.snapshot.paramMap.get('page')){
+      this.page = +this.route.snapshot.paramMap.get('page')!;
+    }
+    else{this.page=1;}
+    this.chapterService.getChapter(this.bookId,this.chapterNum).subscribe(value => {
+      this.chapter=value; this.maxpages=value.pages!;
+      if (this.page==1){
+        this.outercomments = value.comments!.filter(value1 => value1.parent==null);
+        this.innercomments = value.comments!.filter(value1 => value1.parent!=null);
+      }
+    else{this.chapterService.getComments(value.chapter.id,this.page).subscribe(value => {
+        this.outercomments = value.filter(value1 => value1.parent==null);
+        this.innercomments = value.filter(value1 => value1.parent!=null);
+      });}
+    })
+  }
+
+  toggleEdit() {
+
+  }
+
+  deleteChapter() {
+    this.chapterService.deleteChapter(this.chapter!.chapter.id).subscribe(value => this.location.back())
+  }
+
+  deleteComment(commentlayer1: Comment) {
+
+  }
+  postComment(){}
 }
