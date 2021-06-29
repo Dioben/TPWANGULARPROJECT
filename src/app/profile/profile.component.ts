@@ -13,6 +13,7 @@ import {ProfileView} from "../../data/profileView";
 export class ProfileComponent implements OnInit {
   bookmarks?: Book[];
   published?: Book[];
+  creatorvisible:boolean=false;
   constructor(private route:ActivatedRoute,private auth:UserService,private location:Location) { }
 
   ngOnInit(): void {
@@ -33,4 +34,7 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  toggleCreator() {
+    this.creatorvisible=!this.creatorvisible;
+  }
 }
