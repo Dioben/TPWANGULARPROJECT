@@ -14,6 +14,7 @@ import {BookService} from "../book.service";
 export class ProfileComponent implements OnInit {
   bookmarks?: Book[];
   published?: Book[];
+  editableMap: Map<Book,boolean> = new Map<Book,boolean>();
   creatorvisible:boolean=false;
   constructor(private route:ActivatedRoute,private auth:UserService,private location:Location, private bookService:BookService) { }
 
@@ -42,5 +43,16 @@ export class ProfileComponent implements OnInit {
 
   toggleCreator() {
     this.creatorvisible=!this.creatorvisible;
+  }
+  toggleEditor(book:Book){
+    this.editableMap.set(book,!this.editableMap.get(book));
+  }
+
+  updateBook(book: Book, update:Book) {
+    this.editableMap.set(book,false);//close update panel
+    let index:number|undefined = this.published?.indexOf(book);
+    if (index===undefined){return;}
+    this.published![index] = update;
+    book = update;
   }
 }
