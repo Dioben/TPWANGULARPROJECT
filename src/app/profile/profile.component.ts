@@ -30,8 +30,8 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  deleteBook(value: Book){
-    this.bookService.deleteBook(value).subscribe(value => this.published=this.published?.filter(book=> book!==value));
+  deleteBook(book: Book){
+    this.bookService.deleteBook(book).subscribe(value => this.published?.forEach((value1, index) => {if (value1==book){this.published?.splice(index,1)}} ));
   }
 
   private onAuthChange(value:boolean){
