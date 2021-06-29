@@ -5,6 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
 import {ChapterService} from "../chapter.service";
 import {Comment} from "../../data/comment";
+import {CommentPOST} from "../../data/commentPOST";
 
 @Component({
   selector: 'app-chapter',
@@ -76,5 +77,18 @@ export class ChapterComponent implements OnInit {
   deleteComment(commentlayer1: Comment) {
 
   }
-  postComment(){}
+
+  postComment(text:string, id:number|null=null) {
+    let commentPost = new CommentPOST();
+    commentPost.chapter = this.chapter!.chapter.id;
+    commentPost.parent = id;
+    commentPost.content = text;
+    this.chapterService.commentPost(commentPost).subscribe(value => {
+      if (value.parent == null) {
+        this.outercomments!.push(value);
+      } else {
+        this.innercomments!.push(value);
+      }
+    });
+  }
 }
