@@ -22,8 +22,10 @@ export class ChapterComponent implements OnInit {
   maxpages:number=1;
   outercomments?: Comment[];
   innercomments?:Comment[];
+  userId: number|null;
   constructor(private auth:UserService,private route:ActivatedRoute,private location:Location,private chapterService:ChapterService) {
     this.loggedin=auth.authenticated;
+    if (auth.authenticated){this.userId=auth.user_id;}else{this.userId=null;}
     auth.authenticatedChange.subscribe(value => this.handleLoginChange(value));
   }
 
@@ -35,7 +37,8 @@ export class ChapterComponent implements OnInit {
     this.loggedin=value;
     if (this.loggedin){
       this.isauthor = this.auth.user_id==this.authorId;
-    }
+      this.userId=this.auth.user_id;
+    }else {this.userId=null;}
   }
 
   private loadChapter() {

@@ -4,7 +4,7 @@ export class Chapter{
   title?: string;
   text?: string;
   release?: string;
-  number?: number;
+  number!: number;
   novel?: number;
   book_cover?: string;
   total_chapters?:number;
