@@ -5,6 +5,7 @@
       <div class="container-custom-header">
         <span>{{headerMessage}}</span>
         <div class="separator"></div>
+        <span *ngIf="!isPopulated">Not enough content to populate this page.</span>
       </div>
       <!-- BOOKS HERE> <-->
       <div class="list-content" *ngIf="type!='new'">
@@ -41,25 +42,25 @@
     <nav aria-label="pagination">
       <ul class="pagination justify-content-center">
         <li class="page-item" *ngIf="page!=1">
-          <a class="page-link" routerLink="/{{type}}/1/{{type=='search'?'?title='+query:''}}" tabindex="-1">First</a>
+          <a class="page-link" routerLink="/{{type}}/1" [queryParams]="type=='search'?{title:query}:{}" tabindex="-1">First</a>
         </li>
         <li class="page-item" *ngIf="page>3"> <!--gotta be at page 4 at least><-->
-          <a class="page-link" routerLink="/{{ type }}/{{ page-2}}/{{type=='search'?'?title='+query:''}}">{{ page-2 }}</a>
+          <a class="page-link" routerLink="/{{ type }}/{{ page-2}}" [queryParams]="type=='search'?{title:query}:{}">{{ page-2 }}</a>
         </li>
         <li class="page-item" *ngIf="page>2"> <!--gotta be at page 3 at least><-->
-          <a class="page-link" routerLink="/{{ type }}/{{ page-1 }}/{{type=='search'?'?title='+query:''}}">{{ page-1 }}</a>
+          <a class="page-link" routerLink="/{{ type }}/{{ page-1 }}" [queryParams]="type=='search'?{title:query}:{}">{{ page-1 }}</a>
         </li>
         <li class="page-item active">
           <a class="page-link">{{ page }}</a>
         </li>
         <li class="page-item" *ngIf="totalpages>page+1"> <!--still got 1 page before LAST><-->
-          <a class="page-link" routerLink="/{{ type }}/{{ page+1 }}/{{type=='search'?'?title='+query:''}}">{{ page+1 }}</a>
+          <a class="page-link" routerLink="/{{ type }}/{{ page+1 }}" [queryParams]="type=='search'?{title:query}:{}">{{ page+1 }}</a>
         </li>
         <li class="page-item" *ngIf="totalpages>page+2"> <!--still got 2 page before LAST><-->
-          <a class="page-link" routerLink="/{{ type }}/{{ page+2 }}/{{type=='search'?'?title='+query:''}}">{{ page+2 }}</a>
+          <a class="page-link" routerLink="/{{ type }}/{{ page+2 }}" [queryParams]="type=='search'?{title:query}:{}">{{ page+2 }}</a>
         </li>
         <li class="page-item" *ngIf="page!=totalpages">
-          <a class="page-link" routerLink="/{{ type }}/{{ totalpages }}/{{type=='search'?'?title='+query:''}}">Last</a>
+          <a class="page-link" routerLink="/{{ type }}/{{ totalpages }}" [queryParams]="type=='search'?{title:query}:{}">Last</a>
         </li>
       </ul>
     </nav>

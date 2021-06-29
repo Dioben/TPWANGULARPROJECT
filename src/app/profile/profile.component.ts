@@ -5,11 +5,24 @@ import {UserService} from "../user.service";
 import {Location} from "@angular/common";
 import {ProfileView} from "../../data/profileView";
 import {BookService} from "../book.service";
+import {animate, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({height: 0, opacity: 0, overflow: "hidden"}),
+        animate('200ms ease-out', style({height: 500, opacity: 1, overflow: "hidden"}))
+      ]),
+      transition(':leave', [
+        style({height: 500, opacity: 1, overflow: "hidden"}),
+        animate('200ms ease-out', style({height: 0, opacity: 0, overflow: "hidden"}))
+      ])
+    ])
+  ],
 })
 export class ProfileComponent implements OnInit {
   bookmarks?: Book[];
@@ -44,15 +57,8 @@ export class ProfileComponent implements OnInit {
   toggleCreator() {
     this.creatorvisible=!this.creatorvisible;
   }
+
   toggleEditor(book:Book){
     this.editableMap.set(book,!this.editableMap.get(book));
-  }
-
-  updateBook(book: Book, update:Book) {
-    this.editableMap.set(book,false);//close update panel
-    let index:number|undefined = this.published?.indexOf(book);
-    if (index===undefined){return;}
-    this.published![index] = update;
-    book = update;
   }
 }

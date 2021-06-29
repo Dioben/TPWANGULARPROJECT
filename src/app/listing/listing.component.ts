@@ -24,6 +24,8 @@ export class ListingComponent implements OnInit {
   type?:string;
   headerMessage?:string;
   query?:string;
+  isPopulated:boolean = true;
+
   constructor(private location:Location,private route:ActivatedRoute,private listingService:ListingService) { }
 
   ngOnInit(): void {
@@ -62,14 +64,14 @@ export class ListingComponent implements OnInit {
 
   handleResponseNew(value:ChapterListingView){
     if (value.chapters?.length==0 || this.page>value.pages!){
-      this.headerMessage+="\nNot enough content to populate this page";
+      this.isPopulated = false;
     }
     this.chapters=value.chapters;
     this.totalpages=value.pages!;
   }
   handleResponseBooks(value:BookListingView){
     if (value.books?.length==0 || this.page>value.pages!){
-      this.headerMessage+="\nNot enough content to populate this page";
+      this.isPopulated = false;
     }
     this.books=value.books;
     this.totalpages=value.pages!;

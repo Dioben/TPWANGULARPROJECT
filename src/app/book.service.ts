@@ -27,10 +27,10 @@ export class BookService {
     let url:string= BASE_DJANGO_URL+"bookmark/"+book+"/";
     return this.http.get<{bookmarked:boolean}>(url,this.auth.httpOptions);
   }
-  postBook(book:BookPOST):Observable<any>{
+  postBook(book:BookPOST):Observable<Book>{
     if (!this.auth.authenticated){throw new Error("Creating books while not logged in");}
     let url:string =BASE_DJANGO_URL+"bookPost/";
-    return this.http.post(url,book,this.auth.httpOptions);
+    return this.http.post<Book>(url,book,this.auth.httpOptions);
   }
   editBook(book:Book):Observable<any>{
     if(book.author!=this.auth.user_id){throw new Error("You are not this book's author");}
