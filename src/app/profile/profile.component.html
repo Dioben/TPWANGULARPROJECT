@@ -30,17 +30,17 @@
               </div>
             </div>
           </div>
-          <div class="col d-flex flex-column justify-content-between"*ngIf="editableMap.get(book)">
-            <app-book-editor [book]="book" (bookEditEvent)="updateBook(book,$event)"></app-book-editor>
+          <div class="col d-flex flex-column justify-content-between" *ngIf="editableMap.get(book)" [@slideInOut]>
+            <app-book-editor [book]="book" [embedded]="true" (stopEditBookEvent)="toggleEditor(book)"></app-book-editor>
           </div>
           <div class="separator"></div>
         </div>
       </div>
       <div class="d-flex justify-content-center list-button mt-2">
         <button class="btn btn-primary btn-block" (click)="toggleCreator()">New Book</button>
-        <div *ngIf="creatorvisible" [@slideInOut]>
-        <app-book-creator></app-book-creator>
-        </div>
+      </div>
+      <div class="col d-flex flex-column justify-content-between" *ngIf="creatorvisible" [@slideInOut]>
+        <app-book-editor [embedded]="true" (stopEditBookEvent)="toggleCreator()"></app-book-editor>
       </div>
     </div>
   </div>

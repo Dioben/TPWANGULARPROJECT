@@ -1,1 +1,141 @@
-<p>chapter works!</p>
+<div class="col" *ngIf="chapter">
+  <div class="book-header col">
+    <div class="d-flex pb-2">
+      <img class="align-self-center mr-3 mt-2 book-medium-img" src="{{chapter.chapter.book_cover}}">
+      <div class="media-body mt-3 mb-3 d-flex flex-column flex-grow-1">
+        <div class="chapter-book-title mb-3">
+          <h5><a href="/book/{{ chapter.chapter.novel }}/"><b>{{ chapter.chapter.title }}</b></a></h5>
+          <span>by {{ chapter!.author!.username }}</span>
+        </div>
+        <h4><b>{{ chapter.chapter.title }}</b></h4>
+      </div>
+      <div class="d-flex justify-content-end flex-grow-1">
+        <div class="d-flex flex-column" *ngIf="isauthor">
+          <div class="flex-grow-1"></div>
+            <button class="btn btn-primary btn-sm m-1 flex-grow-1" (click)="toggleEdit()"><i class="fa fa-pencil"></i>&nbsp;Edit Chapter</button>
+            <button class="btn btn-danger btn-sm m-1 flex-grow-1" (click)="deleteChapter()"><i class="fa fa-trash"></i>&nbsp;Delete Chapter</button>
+        </div>
+      </div>
+    </div>
+    <div class="book-header-separator"></div>
+  </div>
+  <div class="col-xl-12 offset-xl-0">
+    <div class="container-custom">
+      <nav aria-label="pagination">
+        <ul class="pagination justify-content-between">
+          <li class="page-item {{chapter.chapter.number==1? 'disabled':''}}">
+            <a class="page-link" routerLink="/chapter/{{ chapter.chapter.novel }}/{{ chapter!.chapter.number-1 }}/" tabindex="-1">« Previous Chapter</a>
+          </li>
+          <li class="page-item {{chapter.chapter.number<maxpages? 'disabled':''}}">
+            <a class="page-link" routerLink="/chapter/{{ chapter.chapter.novel }}/{{ chapter!.chapter.number!+1 }}/">Next Chapter »</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="separator"></div>
+      <div class="chapter-text m-2">{{ chapter.chapter.text }}
+      </div>
+      <div class="separator"></div>
+      <nav aria-label="pagination">
+        <ul class="pagination justify-content-between">
+          <li class="page-item {{chapter.chapter.number==1? 'disabled':''}}">
+            <a class="page-link" routerLink="/chapter/{{ chapter.chapter.novel }}/{{ chapter!.chapter.number-1 }}/" tabindex="-1">« Previous Chapter</a>
+          </li>
+          <li class="page-item {{chapter.chapter.number<maxpages? 'disabled':''}}">
+            <a class="page-link" routerLink="/chapter/{{ chapter.chapter.novel }}/{{ chapter!.chapter.number+1 }}/">Next Chapter »</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div class="col-xl-12 offset-xl-0">
+    <div class="container-custom">
+      <div class="container-custom-header">
+        <span>Comments</span>
+        <div class="separator"></div>
+      </div>
+      <div class="comment-form-content">
+        <form #commentForm="ngForm" (ngSubmit)="postComment(commentForm.value.text)">
+          <div class="form-group mb-1">
+            <textarea name="text" class="form-control" rows="3" ngModel></textarea>
+          </div>
+          <div class="d-flex justify-content-end mb-2">
+            <button type="submit" class="btn btn-primary {{!loggedin? 'disabled':''}}">Post</button>
+          </div>
+        </form>
+        <div class="comment-form-content" *ngIf="!loggedin">
+        <span>Log in to comment!</span>
+        </div>
+        <div class="separator"></div>
+      </div>
+      <div class="comment-list-content">
+        <div class="d-flex flex-column" *ngFor="let commentlayer1 of outercomments" >
+          <div class="d-flex justify-content-between">
+            <span><b>{{ commentlayer1.author_name }}</b></span>
+            <span><small>{{ commentlayer1.release }}</small></span>
+          </div>
+          <div class="mt-1">
+            {{ commentlayer1.content }}
+          </div>
+          <div class="d-flex justify-content-end mb-2" *ngIf="loggedin">
+            <button class="btn btn-primary btn-sm" data-toggle="collapse" [attr.data-target]="'#comment'+commentlayer1.id" aria-expanded="false" [attr.aria-controls]="'comment'+commentlayer1.id">Reply</button>
+              <button class="btn btn-danger btn-sm ml-1" (click)="deleteComment(commentlayer1)" *ngIf="userId==commentlayer1.author">Delete</button>
+            <div style="height: 30px"></div>
+          </div>
+          <div class="collapse" id="comment{{ commentlayer1.id }}">
+            <form #commentForm="ngForm" (ngSubmit)="postComment(commentForm.value.text, commentlayer1.id)">
+              <div class="form-group mb-1">
+                <textarea name="text" class="form-control" rows="3" ngModel></textarea>
+              </div>
+              <div class="d-flex justify-content-end mb-2">
+                <button type="submit" class="btn btn-primary {{!loggedin? 'disabled':''}}">Post</button>
+              </div>
+            </form>
+          </div>
+          <div class="comment-children">
+            <div class="d-flex flex-column" *ngFor="let childcomment of innercomments" >
+              <div *ngIf="commentlayer1.id==childcomment.parent"><!--- >added this in, maybe it messes with formatting ,idk<-->
+              <div class="d-flex justify-content-between">
+                <span><b>{{ childcomment.author_name }}</b></span>
+                <span><small>{{ childcomment.release }}</small></span>
+              </div>
+              <div class="mt-1">
+                {{ childcomment.content }}
+              </div>
+              <div class="d-flex justify-content-end mb-2" *ngIf="userId==childcomment.author">
+                  <button class="btn btn-danger btn-sm ml-1" (click)="deleteComment(childcomment)">Delete</button>
+              </div>
+              <div class="mb-5"></div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav aria-label="pagination">
+        <ul class="pagination justify-content-center">
+
+          <li class="page-item" *ngIf="page!=1">
+            <a class="page-link" routerLink="/chapter/{{chapter.chapter.novel}}/{{chapter.chapter.number}}/1" tabindex="-1">First</a>
+          </li>
+          <li class="page-item" *ngIf="page>3"> <!--gotta be at page 4 at least><-->
+            <a class="page-link" routerLink="/chapter/{{chapter.chapter.novel}}/{{chapter.chapter.number}}/{{page-2}}">{{ page-2 }}</a>
+          </li>
+          <li class="page-item" *ngIf="page>2"> <!--gotta be at page 3 at least><-->
+            <a class="page-link" routerLink="/chapter/{{chapter.chapter.novel}}/{{chapter.chapter.number}}/{{page-1}}">{{ page-1 }}</a>
+          </li>
+          <li class="page-item active">
+            <a class="page-link">{{ page }}</a>
+          </li>
+          <li class="page-item" *ngIf="maxpages>page+1"> <!--still got 1 page before LAST><-->
+            <a class="page-link" routerLink="//chapter/{{chapter.chapter.novel!}}/{{chapter.chapter.number}}/{{page+1}}">{{ page+1 }}</a>
+          </li>
+          <li class="page-item" *ngIf="maxpages>page+2"> <!--still got 2 page before LAST><-->
+            <a class="page-link" routerLink="/chapter/{{chapter.chapter.novel}}/{{chapter.chapter.number}}/{{page+2}}">{{ page+2 }}</a>
+          </li>
+          <li class="page-item" *ngIf="page!=maxpages">
+            <a class="page-link" routerLink="/chapter/{{chapter.chapter.novel}}/{{chapter.chapter.number}}/{{maxpages}}">Last</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>

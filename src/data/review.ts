@@ -1,5 +1,5 @@
 export class Review{
-  id!: number;
+  id?: number;
   author_name?: string;
   rating!: number;
   release?: string;
