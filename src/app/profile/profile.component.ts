@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  private deleteBook(value:Book){
+  deleteBook(value: Book){
     this.bookService.deleteBook(value).subscribe(value => this.published=this.published?.filter(book=> book!==value));
   }
 
