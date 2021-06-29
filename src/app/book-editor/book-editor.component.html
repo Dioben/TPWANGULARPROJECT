@@ -1,1 +1,34 @@
-<p>book-editor works!</p>
+<div class="col">
+    <div class="col-xl-12 offset-xl-0">
+        <div class="container-custom">
+            <div class="container-custom-header" *ngIf="!embedded">
+                <span>
+                    <a (click)="stopEditBook()" style="cursor: pointer"><i class="fa fa-arrow-left"></i> Back</a>
+                </span>
+                <div class="separator my-2"></div>
+                <span>Editing book: {{ book.title }}</span>
+                <span *ngIf="!book.id">Creating book</span>
+            </div>
+            <div class="container-custom-header" *ngIf="embedded">
+                <span *ngIf="book.id">Editing book: {{ book.title }}</span>
+                <span *ngIf="!book.id">Creating book</span>
+                <div class="separator"></div>
+            </div>
+            <div class="book-content-content">
+                <form #bookForm="ngForm" (ngSubmit)="submitBook(bookForm.value)">
+                    <div class="form-group">
+                        <label class="form-label" for="edit-book-title">Title:</label>
+                        <input name="title" class="form-control" id="edit-book-title" [ngModel]="book.title">
+                    </div>
+                    <div class="form-group mb-1">
+                        <label class="form-label" for="edit-book-desc">Description:</label>
+                        <textarea style="min-height: 200px" name="description" class="form-control" id="edit-book-desc" [ngModel]="book.description"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

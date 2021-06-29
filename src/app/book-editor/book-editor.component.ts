@@ -2,35 +2,63 @@ import {Component, Input, OnInit, Output,EventEmitter} from '@angular/core';
 import {Book} from "../../data/book";
 import {BookService} from "../book.service";
 import {animate, style, transition, trigger} from "@angular/animations";
+import {BookPOST} from "../../data/bookPOST";
 
 
 @Component({
   selector: 'app-book-editor',
   templateUrl: './book-editor.component.html',
-  styleUrls: ['./book-editor.component.css'],
-  animations: [
-    trigger('slideInOut', [
-      transition(':enter', [
-        style({transform: 'translateY(-100%)'}),
-        animate('200ms ease-in', style({transform: 'translateY(0%)'}))
-      ]),
-      transition(':leave', [
-        animate('200ms ease-in', style({transform: 'translateY(-100%)'}))
-      ])
-    ])
-  ],
+  styleUrls: ['./book-editor.component.css']
 })
 export class BookEditorComponent implements OnInit {
 
-  @Input("book") book!:Book;
+  @Output() stopEditBookEvent = new EventEmitter();
+  @Input() book:Book = new Book();
+  @Input() embedded?:boolean = false;
+  @Input() bookList?:Book[];
   message:string="";
-  @Output() bookEditEvent = new EventEmitter<Book>();
-  constructor(private service:BookService) { }
 
-  ngOnInit(): void {
+  constructor(private bookService:BookService) { }
+
+  ngOnInit(): void { }
+
+  public stopEditBook() {
+    this.stopEditBookEvent.emit();
   }
 
-  submit(){
-    this.service.editBook(this.book).subscribe(value => {this.bookEditEvent.emit(this.book)},error => {this.message="Failed to submit update"});
+  private editBook(data:{"title":string, "description":string}) {
+    this.book.title = data.title;
+    this.book.description = data.description;
+    this.bookService.editBook(this.book).subscribe(value => {
+      if (this.bookList) {
+        let i = this.bookList.findIndex((book) => {
+          return book.id == this.book.id;
+        });
+        this.bookList[i] = this.book;
+      }
+      this.stopEditBook();
+    }, error => {
+      this.message = "Failed to update book";
+    });
+  }
+
+  private createBook(data:{title: string, description:string}) {
+    let bookPost = new BookPOST();
+    bookPost.title = data.title;
+    bookPost.description = data.description;
+    this.bookService.postBook(bookPost).subscribe(value => {
+      this.book = value;
+      if (this.bookList) {
+        this.bookList.push(this.book);
+      }
+      this.stopEditBook();
+    }, error => {
+      this.message = "Failed to create book"
+    })
+  }
+
+  public submitBook(data:{title: string, description:string}) {
+    if (this.book.id) this.editBook(data);
+    else this.createBook(data);
   }
 }

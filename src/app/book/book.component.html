@@ -1,12 +1,12 @@
 <ng-template #noReviews> <span>No reviews yet!</span></ng-template>
 
-<div *ngIf="!isEditingBook && !isCreatingChapter" class="col">
+<div *ngIf="!isCreatingChapter" class="col">
     <div class="book-header col">
         <div class="d-flex">
             <img class="align-self-center mr-3 mt-3 mb-3 book-big-img">
             <div class="media-body mt-3 mb-3 d-flex flex-column flex-grow-1">
                 <h5 class="mt-0 mb-0"><b>{{ book.book.title }}</b></h5>
-                <span>by <a>{{ book.book.author }}</a></span>
+                <span>by <a>{{ book.book.author_name }}</a></span>
                 <div class="d-flex mt-2" *ngIf="book.book.reviewcount && book.book.scoretotal!==undefined; else noReviews">
                     <span class="book-tag-title pl-0">Score: {{ book.rating }}/100</span>
                 </div>
@@ -24,7 +24,6 @@
                             <button *ngIf="book.bookmarked" (click)="bookmark()" class="btn btn-primary m-1 flex-grow-1">
                                 <i class="fa fa-bookmark-o"></i>&nbsp;Unbookmark
                             </button>
-
                         </div>
                     </div>
                 </div>
@@ -34,6 +33,7 @@
         <div class="description pb-3">{{ book.book.description }}
         </div>
     </div>
+    <app-book-editor *ngIf="isEditingBook" [book]="book.book" [embedded]="true" (stopEditBookEvent)="stopEditBook()"></app-book-editor>
     <div class="col-xl-12 offset-xl-0">
         <div class="container-custom">
             <div class="container-custom-header d-flex justify-content-between">
@@ -99,7 +99,7 @@
             <div class="review-list-content">
                 <div *ngFor="let review of reviews">
                     <div class="col d-flex flex-column">
-                        <span>{{ review.author }}</span>
+                        <span>{{ review.author_name }}</span>
                         <div class="d-flex justify-content-between">
                             <span>Score: {{ review.rating }}/100</span>
                             <span><small>{{ formatDate(review.release!) }}</small></span>
@@ -115,19 +115,19 @@
                     <li *ngIf="page != 1" class="page-item">
                         <a class="page-link" routerLink="/book/{{ book.book.id }}}/1/" tabindex="-1">First</a>
                     </li>
-                    <li *ngIf="page > 2" class="page-item">
+                    <li *ngIf="page > 3" class="page-item">
                         <a class="page-link" routerLink="/book/{{ book.book.id }}/{{ page - 2 }}/">{{ page - 2 }}</a>
                     </li>
-                    <li *ngIf="page < 1" class="page-item">
+                    <li *ngIf="page > 2" class="page-item">
                         <a class="page-link" routerLink="/book/{{ book.book.id }}/{{ page - 1 }}/">{{ page - 1 }}</a>
                     </li>
                     <li class="page-item active">
                         <a class="page-link" routerLink="#">{{ page }}</a>
                     </li>
-                    <li *ngIf="page < book.pages-1" class="page-item">
+                    <li *ngIf="book.pages > page + 1" class="page-item">
                         <a class="page-link" routerLink="/book/{{ book.book.id }}/{{ page + 1 }}/">{{ page + 1 }}</a>
                     </li>
-                    <li *ngIf="page < book.pages" class="page-item">
+                    <li *ngIf="book.pages > page + 2" class="page-item">
                         <a class="page-link" routerLink="/book/{{ book.book.id }}/{{ page + 2 }}/">{{ page + 2 }}</a>
                     </li>
                     <li *ngIf="page != book.pages" class="page-item">
@@ -139,66 +139,4 @@
     </div>
 </div>
 
-
-
-<div *ngIf="isEditingBook" class="col">
-    <div class="col-xl-12 offset-xl-0">
-        <div class="container-custom">
-            <div class="container-custom-header">
-                <span>
-                    <a (click)="stopEditBook()" style="cursor: pointer"><i class="fa fa-arrow-left"></i> Back</a>
-                </span>
-                <div class="separator my-2"></div>
-                <span>Editing book: {{ book.book.title }}</span>
-            </div>
-            <div class="book-content-content">
-                <form #bookEdit = "ngForm" (ngSubmit)="editBook(bookEdit.value)">
-                    <div class="form-group">
-                        <label class="form-label" for="edit-book-title">Title:</label>
-                        <input name="title" class="form-control" id="edit-book-title" [ngModel]="book.book.title">
-                    </div>
-                    <div class="form-group mb-1">
-                        <label class="form-label" for="edit-book-desc">Description:</label>
-                        <textarea style="min-height: 200px" name="description" class="form-control" id="edit-book-desc" [ngModel]="book.book.description"></textarea>
-                    </div>
-                    <div class="d-flex justify-content-center mt-4">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<div *ngIf="isCreatingChapter" class="col">
-    <div class="col-xl-12 offset-xl-0">
-        <div class="container-custom">
-            <div class="container-custom-header">
-                <span>
-                    <a (click)="stopCreateChapter()" style="cursor: pointer"><i class="fa fa-arrow-left"></i> Back</a>
-                </span>
-                <div class="separator my-2"></div>
-                <span>
-                    Chapter creation
-                </span>
-            </div>
-            <div class="chapter-content-content">
-                <form #chapterCreate="ngForm" (ngSubmit)="createChapter(chapterCreate.value)">
-                    <div class="form-group">
-                        <label class="form-label" for="create-chapter-title">Title:</label>
-                        <input name="title" class="form-control" id="create-chapter-title" ngModel>
-                    </div>
-                    <div class="form-group mb-1">
-                        <label class="form-label" for="create-chapter-text">Content:</label>
-                        <textarea style="min-height: 600px" name="text" class="form-control" id="create-chapter-text" ngModel></textarea>
-                    </div>
-                    <div class="d-flex justify-content-center mt-2">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<app-chapter-editor *ngIf="isCreatingChapter" [bookId]="bookId" (stopCreateChapterEvent)="stopCreateChapter()"></app-chapter-editor>

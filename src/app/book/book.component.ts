@@ -77,14 +77,6 @@ export class BookComponent implements OnInit {
     this.isEditingBook = false;
   }
 
-  public editBook(data:{"title":string, "description":string}) {
-    this.book.book.title = data.title;
-    this.book.book.description = data.description;
-    this.bookService.editBook(this.book.book).subscribe(value => {
-      this.isEditingBook = false;
-    });
-  }
-
   public deleteBook() {
     this.bookService.deleteBook(this.book.book).subscribe(value => {
       this.location.back()
@@ -97,19 +89,6 @@ export class BookComponent implements OnInit {
 
   public stopCreateChapter() {
     this.isCreatingChapter = false;
-  }
-
-  public createChapter(data:{"title":string, "text":string}) {
-    let newChapter = new ChapterPOST();
-    newChapter.title = data.title;
-    newChapter.text = data.text;
-    newChapter.novel = this.bookId!;
-    console.log(data.title)
-    console.log(data.text)
-    console.log(this.bookId)
-    this.chapterService.postChapter(newChapter).subscribe(value => {
-      this.isCreatingChapter = false
-    })
   }
 
   public submitReview(data:{"rating":number, "text": string}) {
