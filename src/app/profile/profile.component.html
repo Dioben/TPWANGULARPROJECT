@@ -28,9 +28,7 @@
                 <form action="/bookeditor/{{ book.id }}/" method="post">
                   <button class="btn btn-primary btn-sm mb-1 mr-1" type="submit">Edit</button>
                 </form>
-                <form action="/deletebook/{{ book.id }}/" method="post">
-                  <button class="btn btn-danger btn-sm mb-1" type="submit">Delete</button>
-                </form>
+                  <button class="btn btn-danger btn-sm mb-1" (click)="deleteBook(book)">Delete</button>
               </div>
             </div>
           </div>
