@@ -7,4 +7,5 @@ export class Book{
   chapters?: number;
   author?: number;
   cover?: string;
+  author_name?: string;
 }

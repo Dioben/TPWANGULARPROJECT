@@ -14,6 +14,7 @@ import { ProfileComponent } from './profile/profile.component';
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import { NotfoundComponent } from './notfound/notfound.component';
+import { BookCreatorComponent } from './book-creator/book-creator.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { NotfoundComponent } from './notfound/notfound.component';
     OverviewComponent,
     ListingComponent,
     ProfileComponent,
-    NotfoundComponent
+    NotfoundComponent,
+    BookCreatorComponent
   ],
   imports: [
     BrowserModule,

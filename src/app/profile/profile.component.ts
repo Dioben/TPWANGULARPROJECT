@@ -4,6 +4,7 @@ import {ActivatedRoute} from "@angular/router";
 import {UserService} from "../user.service";
 import {Location} from "@angular/common";
 import {ProfileView} from "../../data/profileView";
+import {BookService} from "../book.service";
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +14,9 @@ import {ProfileView} from "../../data/profileView";
 export class ProfileComponent implements OnInit {
   bookmarks?: Book[];
   published?: Book[];
-  constructor(private route:ActivatedRoute,private auth:UserService,private location:Location) { }
+  editableMap: Map<Book,boolean> = new Map<Book,boolean>();
+  creatorvisible:boolean=false;
+  constructor(private route:ActivatedRoute,private auth:UserService,private location:Location, private bookService:BookService) { }
 
   ngOnInit(): void {
     if (!this.auth.authenticated){this.location.back();}
@@ -26,6 +29,11 @@ export class ProfileComponent implements OnInit {
     this.published=value.books;
 
   }
+
+  deleteBook(book: Book){
+    this.bookService.deleteBook(book).subscribe(value => this.published?.forEach((value1, index) => {if (value1==book){this.published?.splice(index,1)}} ));
+  }
+
   private onAuthChange(value:boolean){
     if (!value){this.location.back();return;}
     else{
@@ -33,4 +41,18 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  toggleCreator() {
+    this.creatorvisible=!this.creatorvisible;
+  }
+  toggleEditor(book:Book){
+    this.editableMap.set(book,!this.editableMap.get(book));
+  }
+
+  updateBook(book: Book, update:Book) {
+    this.editableMap.set(book,false);//close update panel
+    let index:number|undefined = this.published?.indexOf(book);
+    if (index===undefined){return;}
+    this.published![index] = update;
+    book = update;
+  }
 }
