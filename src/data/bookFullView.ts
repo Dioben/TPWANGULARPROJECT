@@ -10,5 +10,5 @@ export class BookFullView {
   chapters!: ChapterSimple[];
   reviews?: Review[];
   rating?: number;
-  pages?: number;
+  pages!: number;
 }
