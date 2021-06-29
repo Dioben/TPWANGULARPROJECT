@@ -79,13 +79,13 @@ export class BookComponent implements OnInit {
   public editBook(data:{"title":string, "description":string}) {
     this.book.book.title = data.title;
     this.book.book.description = data.description;
-    this.bookService.editBook(this.book.book);
-    localStorage.removeItem("isEditingBook");
-    window.location.reload();
+    this.bookService.editBook(this.book.book).subscribe(value => {
+      localStorage.removeItem("isEditingBook");
+      window.location.reload();
+    });
   }
 
   public deleteBook() {
-    this.bookService.deleteBook(this.book.book);
-    this.location.back();
+    this.bookService.deleteBook(this.book.book).subscribe(value => this.location.back());
   }
 }
