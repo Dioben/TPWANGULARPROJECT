@@ -17,9 +17,11 @@ export class ChapterComponent implements OnInit {
   chapter?:ChapterFullView;
   chapterNum?:number;
   authorId?:number;
-  comments?:Comment[];
   bookId?:number;
   page:number=1;
+  maxpages:number=1;
+  outercomments?: Comment[];
+  innercomments?:Comment[];
   constructor(private auth:UserService,private route:ActivatedRoute,private location:Location,private chapterService:ChapterService) {
     this.loggedin=auth.authenticated;
     auth.authenticatedChange.subscribe(value => this.handleLoginChange(value));
@@ -48,9 +50,28 @@ export class ChapterComponent implements OnInit {
     }
     else{this.page=1;}
     this.chapterService.getChapter(this.bookId,this.chapterNum).subscribe(value => {
-      this.chapter=value;
-      if (this.page==1){this.comments = value.comments!}
-    else{this.chapterService.getComments(value.chapter.id,this.page).subscribe(value => this.comments=value);}
+      this.chapter=value; this.maxpages=value.pages!;
+      if (this.page==1){
+        this.outercomments = value.comments!.filter(value1 => value1.parent==null);
+        this.innercomments = value.comments!.filter(value1 => value1.parent!=null);
+      }
+    else{this.chapterService.getComments(value.chapter.id,this.page).subscribe(value => {
+        this.outercomments = value.filter(value1 => value1.parent==null);
+        this.innercomments = value.filter(value1 => value1.parent!=null);
+      });}
     })
   }
+
+  toggleEdit() {
+
+  }
+
+  deleteChapter() {
+    this.chapterService.deleteChapter(this.chapter!.chapter.id).subscribe(value => this.location.back())
+  }
+
+  deleteComment(commentlayer1: Comment) {
+
+  }
+  postComment(){}
 }

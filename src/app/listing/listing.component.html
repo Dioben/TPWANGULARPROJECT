@@ -41,7 +41,7 @@
     <nav aria-label="pagination">
       <ul class="pagination justify-content-center">
         <li class="page-item" *ngIf="page!=1">
-          <a class="page-link" routerLink="/{{type}}/1/{{type=='search'?'?title='+query:''}}"> tabindex="-1">First</a>
+          <a class="page-link" routerLink="/{{type}}/1/{{type=='search'?'?title='+query:''}}" tabindex="-1">First</a>
         </li>
         <li class="page-item" *ngIf="page>3"> <!--gotta be at page 4 at least><-->
           <a class="page-link" routerLink="/{{ type }}/{{ page-2}}/{{type=='search'?'?title='+query:''}}">{{ page-2 }}</a>
