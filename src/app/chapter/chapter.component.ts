@@ -45,6 +45,7 @@ export class ChapterComponent implements OnInit {
   private loadChapter() {
     if (!this.route.snapshot.paramMap.get('book')){this.location.back();return;} //don't even try if no book, if book ids werent unable to be 0 this would suck
     this.bookId = +this.route.snapshot.paramMap.get('book')!;
+
     if (this.route.snapshot.paramMap.get('number')){
       this.chapterNum = +this.route.snapshot.paramMap.get('number')!;
     }
@@ -59,10 +60,14 @@ export class ChapterComponent implements OnInit {
         this.outercomments = value.comments!.filter(value1 => value1.parent==null);
         this.innercomments = value.comments!.filter(value1 => value1.parent!=null);
       }
-    else{this.chapterService.getComments(value.chapter.id,this.page).subscribe(value => {
-        this.outercomments = value.filter(value1 => value1.parent==null);
-        this.innercomments = value.filter(value1 => value1.parent!=null);
-      });}
+    else{this.loadComments();}
+    })
+    this.route.params.subscribe(params=>{//handle page change
+      if(params['page'] && this.page!=params['page']){
+        this.page=params['page'];
+        this.loadComments();
+
+      }
     })
   }
 
@@ -90,5 +95,13 @@ export class ChapterComponent implements OnInit {
         this.innercomments!.push(value);
       }
     });
+  }
+
+  private loadComments() {
+    this.chapterService.getComments(this.chapter!.chapter.id,this.page).subscribe(value => {
+      this.outercomments = value.filter(value1 => value1.parent==null);
+      this.innercomments = value.filter(value1 => value1.parent!=null);
+    });
+
   }
 }
