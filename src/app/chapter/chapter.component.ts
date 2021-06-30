@@ -15,6 +15,7 @@ import {CommentPOST} from "../../data/commentPOST";
 export class ChapterComponent implements OnInit {
   loggedin:boolean; //allow comment
   isauthor:boolean=false; //allow edit
+  isadmin:boolean=false; //allow delete
   chapter?:ChapterFullView;
   chapterNum?:number;
   authorId?:number;
@@ -26,6 +27,7 @@ export class ChapterComponent implements OnInit {
   userId: number|null;
   constructor(private auth:UserService,private route:ActivatedRoute,private location:Location,private chapterService:ChapterService) {
     this.loggedin=auth.authenticated;
+    this.isadmin=auth.userIsStaff;
     if (auth.authenticated){this.userId=auth.user_id;}else{this.userId=null;}
     auth.authenticatedChange.subscribe(value => this.handleLoginChange(value));
   }
@@ -39,7 +41,12 @@ export class ChapterComponent implements OnInit {
     if (this.loggedin){
       this.isauthor = this.auth.user_id==this.authorId;
       this.userId=this.auth.user_id;
-    }else {this.userId=null;}
+      this.isadmin=this.auth.userIsStaff
+    }else {
+      this.userId=null;
+      this.isadmin=false;
+      this.isauthor=false;
+    }
   }
 
   private loadChapter() {
