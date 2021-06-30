@@ -38,7 +38,7 @@ export class BookService {
     return this.http.put(url,book,this.auth.httpOptions);
   }
   deleteBook(book:Book){
-    if(book.author!=this.auth.user_id){throw new Error("You are not this book's author");}
+    if(book.author!=this.auth.user_id && !this.auth.userIsStaff){throw new Error("You are not this book's author");}
     let url:string=BASE_DJANGO_URL+"deleteBook/"+book.id+"/";
     return this.http.delete(url,this.auth.httpOptions);
   }
