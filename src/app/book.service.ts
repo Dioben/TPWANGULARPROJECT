@@ -42,10 +42,10 @@ export class BookService {
     let url:string=BASE_DJANGO_URL+"deleteBook/"+book.id+"/";
     return this.http.delete(url,this.auth.httpOptions);
   }
-  postReview(review:Review,book:Book):Observable<any>{
+  postReview(review:Review,book:Book):Observable<Review>{
     if(!this.auth.authenticated || book.author==this.auth.user_id){throw new Error("You cannot review this book");}
     let url:string=BASE_DJANGO_URL+"review/";
-    return this.http.post(url,review,this.auth.httpOptions);
+    return this.http.post<Review>(url,review,this.auth.httpOptions);
   }
   deleteReview(review:number):Observable<any>{
   if(!this.auth.authenticated){throw new Error("Anon should not be able to delete reviews");}

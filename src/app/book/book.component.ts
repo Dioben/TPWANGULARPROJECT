@@ -117,13 +117,13 @@ export class BookComponent implements OnInit {
     this.bookService.postReview(self_review, this.book.book).subscribe(value => {
       if (this.book.self_review) {
         let i = this.reviews!.findIndex((review) => {
-          return review.author == self_review.author;
+          return review.author == value.author;
         });
-        this.reviews![i] = self_review;
+        this.reviews![i] = value;
       } else {
-        this.reviews!.push(self_review);
+        this.reviews!.push(value);
       }
-      this.book.self_review = self_review;
+      this.book.self_review = value;
     });
   }
 
