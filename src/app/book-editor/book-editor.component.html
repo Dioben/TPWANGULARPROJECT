@@ -24,6 +24,10 @@
                         <label class="form-label" for="edit-book-desc">Description:</label>
                         <textarea style="min-height: 200px" name="description" class="form-control" id="edit-book-desc" [ngModel]="book.description"></textarea>
                     </div>
+                  <div class="form-group">
+                    <label class="form-label" for="edit-book-cover">Cover Image:</label>
+                    <input name="cover" class="form-control" id="edit-book-cover" [ngModel]="book.cover">
+                  </div>
                     <div class="d-flex justify-content-center mt-4">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
