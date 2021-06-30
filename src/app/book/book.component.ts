@@ -63,8 +63,14 @@ export class BookComponent implements OnInit {
    if (this.page!=1){
      this.bookService.getReviews(this.bookId,this.page).subscribe(value => this.reviews=value);
    }
+    this.route.params.subscribe(params=>{//handle page change
+      if(params['page'] && this.page!=params['page']){
+        this.page=params['page'];
+        this.bookService.getReviews(this.bookId!,this.page).subscribe(value => this.reviews=value);
+      }
+    })
   }
-  
+
   public bookmark() {
     this.bookService.bookmark(this.bookId!).subscribe(value => this.book.bookmarked = value.bookmarked);
   }
