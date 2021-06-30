@@ -49,7 +49,7 @@ export class UserService {
     let token:string = value["key"];
   if (!token){this.authenticatedChange.next(false); return;}
     this.httpOptions = {headers : new HttpHeaders({"Content-Type":"application/json","Authorization": "Token "+token})};
-    let url:string = BASE_DJANGO_URL+"/whoami/";
+    let url:string = BASE_DJANGO_URL+"whoami/";
     this.http.get<User>(url,this.httpOptions).subscribe(value1 => this.finalizeLogin(value1,token));
   }
 

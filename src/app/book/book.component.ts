@@ -130,7 +130,7 @@ export class BookComponent implements OnInit {
   public deleteReview(review:Review) {
     this.bookService.deleteReview(review.id!).subscribe(value => {
       let i = this.reviews!.findIndex((review) => {
-        return review.author == this.book.self_review!.author;
+        return review.author == review!.author;
       });
       this.reviews!.splice(i, 1);
       this.book.self_review = undefined;
