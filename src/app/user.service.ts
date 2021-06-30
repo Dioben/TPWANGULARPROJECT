@@ -73,6 +73,7 @@ export class UserService {
     this.authenticated=false;
     this.user_id=null;
     this.user_name=null;
+    this.userIsStaff=false;
     localStorage.removeItem('token');
     localStorage.removeItem('uid');
     localStorage.removeItem('uname');
