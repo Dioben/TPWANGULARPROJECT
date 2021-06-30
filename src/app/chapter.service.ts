@@ -48,11 +48,6 @@ export class ChapterService {
     let url:string = BASE_DJANGO_URL+"comment/";
     return this.http.post<Comment>(url,comment,this.auth.httpOptions);
   }
-  commentEdit(comment:CommentPOST):Observable<any>{
-    if(!this.auth.authenticated){throw new Error("Anon cannot comment");}
-    let url:string = BASE_DJANGO_URL+"commentEdit/";
-    return this.http.put(url,comment,this.auth.httpOptions);
-  }
   commentDelete(commentId:number): Observable<any>{
     if(!this.auth.authenticated){throw new Error("Anon cannot delete comments");}
     let url:string = BASE_DJANGO_URL+"commentDelete/"+commentId+"/";
