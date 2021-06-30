@@ -39,10 +39,13 @@ export class UserService {
 
   }
 
-  login(username:string, password:string):void{
+  async login(username:string, password:string):Promise<boolean>{
     let url:string = BASE_DJANGO_URL+"auth/login/";
-    this.http.post<{key:string}>(url,{"username":username,"password":password}, this.httpOptions).subscribe(value =>this.loadUserInfo(value))
-
+    await this.http.post<{key:string}>(url,{"username":username,"password":password}, this.httpOptions).toPromise().then(value => {
+      this.loadUserInfo(value);
+      return true;
+    }).catch(e => {})
+    return false;
   }
 
   private loadUserInfo(value: {key:string}) {

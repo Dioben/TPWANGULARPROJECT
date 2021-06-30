@@ -1,3 +1,18 @@
+/* https://www.w3schools.com/howto/howto_css_loader.asp */
+.loader {
+  border: 5px solid #cbcbcb;
+  border-top: 5px solid #337ab7;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  animation: spin 2s linear infinite;
+  margin: 4px 8px;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 html, body {
   max-width: 100%;
   overflow-x: hidden;

@@ -12,11 +12,6 @@ enum states {CLOSED_LOGIN,CLOSED_REGISTER,LOGIN,REGISTER,LOGIN_WAITING,REGISTER_
 export class UserauthComponent implements OnInit {
 
   username: string|null="";
-  password: string="";
-  registerName:string="";
-  registerPassword1:string="";
-  registerPassword2:string="";
-  registerEmail:string="";
   message:string="";
   state:states;
   constructor(private userService:UserService) {
@@ -30,29 +25,31 @@ export class UserauthComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public async register() {
-    if (this.registerPassword2 != this.registerPassword1) {
+  public async register(data:{username:string,email:string,password1:string,password2:string}) {
+    if (data.password1 != data.password2) {
       this.message = "Passwords do not match";
       return;
     }
     this.state = states.REGISTER_WAITING;
-    this.handleRegister(await this.userService.register(this.registerName, this.registerPassword1, this.registerPassword2, this.registerEmail));
+    let registered = await this.userService.register(data.username, data.password1, data.password2, data.email);
+    this.handleRegister(registered, data.username, data.password1);
   }
-  private handleRegister(value:boolean){
+  private handleRegister(value:boolean, username:string, password:string){
     if (!value){
       this.state=states.REGISTER;
       this.message="username or email is taken";
     }else{
-      this.username=this.registerName;
-      this.password=this.registerPassword1;
-      this.login();
+      this.login({username:username, password:password});
     }
   }
 
-  public login() {
+  public async login(data:{username:string,password:string}) {
     this.state=states.LOGIN_WAITING;
-    this.userService.login(this.username!,this.password);
+    this.username = data.username
+    let success = await this.userService.login(data.username,data.password);
+    if (!success) this.state = states.LOGIN
   }
+
   public logout(){
     this.userService.logout();
   }
