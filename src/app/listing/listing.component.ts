@@ -4,7 +4,6 @@ import {ActivatedRoute, UrlSegment} from "@angular/router";
 import {ListingService} from "../listing.service";
 import {Book} from "../../data/book";
 import {Chapter} from "../../data/chapter";
-import {query} from "@angular/animations";
 import {ChapterListingView} from "../../data/chapterListingView";
 import {BookListingView} from "../../data/bookListingView";
 
@@ -39,6 +38,7 @@ export class ListingComponent implements OnInit {
   }
 
   private populatePage() {
+    this.isPopulated=true;
     if (this.route.snapshot.paramMap.get('page')){
       this.page= +this.route.snapshot.paramMap.get('page')!; //defaulted to 1
     }
@@ -60,6 +60,12 @@ export class ListingComponent implements OnInit {
       this.headerMessage="Searching for \""+this.query+"\"";
       this.listingService.search(this.query!,this.page).subscribe(value => this.handleResponseBooks(value));
     }
+    this.route.params.subscribe(params=>{//handle page change
+     if(params['page'] && this.page!=params['page']){
+       this.populatePage();
+
+     }
+    })
   }
 
   handleResponseNew(value:ChapterListingView){
@@ -76,4 +82,5 @@ export class ListingComponent implements OnInit {
     this.books=value.books;
     this.totalpages=value.pages!;
   }
+
 }
