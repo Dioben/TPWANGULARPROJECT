@@ -47,9 +47,9 @@ export class BookService {
     let url:string=BASE_DJANGO_URL+"review/";
     return this.http.post(url,review,this.auth.httpOptions);
   }
-  deleteReview(book:number):Observable<any>{
+  deleteReview(review:number):Observable<any>{
   if(!this.auth.authenticated){throw new Error("Anon should not be able to delete reviews");}
-  let url:string = BASE_DJANGO_URL+"reviewDelete/"+book+"/";
+  let url:string = BASE_DJANGO_URL+"reviewDelete/"+review+"/";
   return this.http.delete(url,this.auth.httpOptions);
   }
 }

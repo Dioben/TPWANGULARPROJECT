@@ -17,6 +17,7 @@ export class UserService {
   user_id:number|null;
   user_name:string|null;
   httpOptions: { headers: HttpHeaders };
+  private userIsStaff: boolean;
 
   constructor(private http:HttpClient) {
     this.authenticated=false;
@@ -33,6 +34,7 @@ export class UserService {
     }
     this.user_id = localStorage.getItem('uid')? parseInt(<string>localStorage.getItem('uid')) : null;
     this.user_name = localStorage.getItem('uname')? localStorage.getItem('uname') : null;
+    this.userIsStaff = localStorage.getItem('isStaff')? localStorage.getItem('isStaff')=="true" : false;
     if (!this.user_id){this.authenticated=false;}
 
   }
@@ -47,7 +49,7 @@ export class UserService {
     let token:string = value["key"];
   if (!token){this.authenticatedChange.next(false); return;}
     this.httpOptions = {headers : new HttpHeaders({"Content-Type":"application/json","Authorization": "Token "+token})};
-    let url:string = BASE_DJANGO_URL+"auth/user/";
+    let url:string = BASE_DJANGO_URL+"/whoami/";
     this.http.get<User>(url,this.httpOptions).subscribe(value1 => this.finalizeLogin(value1,token));
   }
 
@@ -55,10 +57,12 @@ export class UserService {
     if (user){
       this.user_id=user.pk;
       this.user_name=user.username!;
+      this.userIsStaff = user.is_staff;
       this.authenticated=true;
       localStorage.setItem("token",token);
       localStorage.setItem("uid",String(user.pk));
       localStorage.setItem("uname",<string>user.username);
+      localStorage.setItem("isStaff",user.is_staff?"true":"false");
       this.authenticatedChange.next(true);
     }else{
       this.authenticatedChange.next(false);
@@ -72,6 +76,7 @@ export class UserService {
     localStorage.removeItem('token');
     localStorage.removeItem('uid');
     localStorage.removeItem('uname');
+    localStorage.removeItem("isStaff");
     this.authenticatedChange.next(false);
     this.http.post(BASE_DJANGO_URL+"auth/logout/",this.httpOptions); //probably not necessary but I'm not risking it
     this.httpOptions = {headers :new HttpHeaders({"Content-Type":"application/json"})};
