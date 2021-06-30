@@ -10,12 +10,12 @@
         <h4><b>{{ chapter.chapter.title }}</b></h4>
       </div>
       <div class="d-flex justify-content-end flex-grow-1">
-        <div class="d-flex flex-column" *ngIf="isauthor"> <!-- >with this structure i can't allow admin to delete here <-->
+        <div class="d-flex flex-column">
           <div class="flex-grow-1"></div>
-          <div class="d-flex">
+          <div *ngIf="isauthor" class="d-flex">
             <button class="btn btn-primary btn-sm m-1 flex-grow-1" (click)="startEditChapter()"><i class="fa fa-pencil"></i>&nbsp;Edit Chapter</button>
           </div>
-          <div class="d-flex">
+          <div *ngIf="isauthor || isadmin" class="d-flex">
             <button class="btn btn-danger btn-sm m-1 flex-grow-1" (click)="deleteChapter()"><i class="fa fa-trash"></i>&nbsp;Delete Chapter</button>
           </div>
         </div>

@@ -150,6 +150,7 @@ export class BookComponent implements OnInit {
       })
       this.book.chapters.splice(i, 1);
       if (this.book.lastread! > i) this.book.lastread!--;
+      else if (this.book.lastread! == i) this.book.lastread=0;
     });
   }
 

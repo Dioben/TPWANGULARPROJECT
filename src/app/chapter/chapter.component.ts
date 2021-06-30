@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ChapterFullView} from "../../data/chapterFullView";
 import {UserService} from "../user.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Location} from "@angular/common";
 import {ChapterService} from "../chapter.service";
 import {Comment} from "../../data/comment";
@@ -26,7 +26,7 @@ export class ChapterComponent implements OnInit {
   userId: number|null;
   isEditingChapter:boolean = false;
 
-  constructor(private auth:UserService,private route:ActivatedRoute,private location:Location,private chapterService:ChapterService) {
+  constructor(private auth:UserService,private route:ActivatedRoute,private location:Location,private chapterService:ChapterService, private router:Router) {
     this.loggedin=auth.authenticated;
     this.isadmin=auth.userIsStaff;
     if (auth.authenticated){this.userId=auth.user_id;}else{this.userId=null;}
@@ -76,7 +76,7 @@ export class ChapterComponent implements OnInit {
   }
 
   deleteChapter() {
-    this.chapterService.deleteChapter(this.chapter!.chapter.id).subscribe(value => this.location.back())
+    this.chapterService.deleteChapter(this.chapter!.chapter.id).subscribe(value => this.router.navigateByUrl("/book/"+this.bookId))
   }
 
   deleteComment(comment: Comment) {
