@@ -54,19 +54,16 @@ export class ChapterComponent implements OnInit {
       this.page = +this.route.snapshot.paramMap.get('page')!;
     }
     else{this.page=1;}
-    this.chapterService.getChapter(this.bookId,this.chapterNum).subscribe(value => {
-      this.chapter=value; this.maxpages=value.pages!;
-      if (this.page==1){
-        this.outercomments = value.comments!.filter(value1 => value1.parent==null);
-        this.innercomments = value.comments!.filter(value1 => value1.parent!=null);
-      }
-    else{this.loadComments();}
-    })
+    this.getChapter();
     this.route.params.subscribe(params=>{//handle page change
+      let changed = false;
       if(params['page'] && this.page!=params['page']){
         this.page=params['page'];
         this.loadComments();
-
+      }
+      if(params['number'] && this.chapterNum!=params['number']){
+        this.chapterNum=params['number'];
+        this.getChapter();
       }
     })
   }
@@ -102,6 +99,18 @@ export class ChapterComponent implements OnInit {
       this.outercomments = value.filter(value1 => value1.parent==null);
       this.innercomments = value.filter(value1 => value1.parent!=null);
     });
+  }
 
+  private getChapter() {
+    this.chapterService.getChapter(this.bookId!,this.chapterNum!).subscribe(value => {
+      this.chapter=value; this.maxpages=value.pages!;
+      if (this.page==1){
+        this.outercomments = value.comments!.filter(value1 => value1.parent==null);
+        this.innercomments = value.comments!.filter(value1 => value1.parent!=null);
+      }
+      else{
+        this.loadComments();
+      }
+    });
   }
 }

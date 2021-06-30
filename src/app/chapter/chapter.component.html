@@ -26,7 +26,7 @@
           <li class="page-item {{chapter.chapter.number==1? 'disabled':''}}">
             <a class="page-link" routerLink="/chapter/{{ chapter.chapter.novel }}/{{ chapter!.chapter.number-1 }}/" tabindex="-1">« Previous Chapter</a>
           </li>
-          <li class="page-item {{chapter.chapter.number<maxpages? 'disabled':''}}">
+          <li class="page-item {{chapter.chapter.number==chapter.chapter.total_chapters? 'disabled':''}}">
             <a class="page-link" routerLink="/chapter/{{ chapter.chapter.novel }}/{{ chapter!.chapter.number!+1 }}/">Next Chapter »</a>
           </li>
         </ul>
@@ -40,7 +40,7 @@
           <li class="page-item {{chapter.chapter.number==1? 'disabled':''}}">
             <a class="page-link" routerLink="/chapter/{{ chapter.chapter.novel }}/{{ chapter!.chapter.number-1 }}/" tabindex="-1">« Previous Chapter</a>
           </li>
-          <li class="page-item {{chapter.chapter.number<maxpages? 'disabled':''}}">
+          <li class="page-item {{chapter.chapter.number==chapter.chapter.total_chapters? 'disabled':''}}">
             <a class="page-link" routerLink="/chapter/{{ chapter.chapter.novel }}/{{ chapter!.chapter.number+1 }}/">Next Chapter »</a>
           </li>
         </ul>
