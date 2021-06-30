@@ -4,8 +4,8 @@
       <img class="align-self-center mr-3 mt-2 book-medium-img" src="{{chapter.chapter.book_cover}}">
       <div class="media-body mt-3 mb-3 d-flex flex-column flex-grow-1">
         <div class="chapter-book-title mb-3">
-          <h5><a href="/book/{{ chapter.chapter.novel }}/"><b>{{ chapter.chapter.title }}</b></a></h5>
-          <span>by {{ chapter!.author!.username }}</span>
+          <h5><a href="/book/{{ chapter.chapter.novel }}/"><b>{{ chapter.chapter.book_name }}</b></a></h5>
+          <span> by {{ chapter!.author!.username }}</span>
         </div>
         <h4><b>{{ chapter.chapter.title }}</b></h4>
       </div>
