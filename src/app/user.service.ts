@@ -17,7 +17,7 @@ export class UserService {
   user_id:number|null;
   user_name:string|null;
   httpOptions: { headers: HttpHeaders };
-  private userIsStaff: boolean;
+  userIsStaff: boolean;
 
   constructor(private http:HttpClient) {
     this.authenticated=false;
