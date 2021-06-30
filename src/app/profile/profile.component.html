@@ -40,7 +40,7 @@
         <button class="btn btn-primary btn-block" (click)="toggleCreator()">New Book</button>
       </div>
       <div class="col d-flex flex-column justify-content-between" *ngIf="creatorvisible" [@slideInOut]>
-        <app-book-editor [embedded]="true" (stopEditBookEvent)="toggleCreator()"></app-book-editor>
+        <app-book-editor [bookList]="published" [embedded]="true" (stopEditBookEvent)="toggleCreator()"></app-book-editor>
       </div>
     </div>
   </div>
