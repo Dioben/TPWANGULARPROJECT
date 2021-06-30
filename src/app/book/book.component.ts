@@ -107,10 +107,7 @@ export class BookComponent implements OnInit {
       self_review = this.book.self_review;
     } else {
       self_review = new Review();
-      self_review.author = this.auth.user_id!;
       self_review.novel = this.bookId!;
-      self_review.author_name = this.auth.user_name!;
-      self_review.release = Date.now().toString();
     }
     self_review.rating = data.rating;
     self_review.text = data.text;
