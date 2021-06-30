@@ -15,7 +15,7 @@
                         <div class="flex-grow-1"></div>
                         <button *ngIf="isauthor" (click)="startEditBook()" class="btn btn-primary btn-sm m-1"><i class="fa fa-pencil"></i>&nbsp;Edit Book</button>
                         <button *ngIf="isauthor || isadmin" (click)="deleteBook()" class="btn btn-danger btn-sm m-1"><i class="fa fa-trash"></i>&nbsp;Delete Book</button>
-                        <a routerLink="/chapter/{{ book.book.id }}/{{ book.lastread }}/" style="color: white" class="btn btn-primary m-1"><i class="fa fa-play"></i>&nbsp;Continue Reading</a>
+                        <a routerLink="/chapter/{{ book.book.id }}/{{ book.lastread }}/" style="color: white" class="btn btn-primary m-1 {{book.lastread==0? 'disabled':''}}"><i class="fa fa-play"></i>&nbsp;Continue Reading</a>
                         <div class="d-flex">
                             <input type="hidden" value="{{ book.book.id }}" name="bookid">
                             <button *ngIf="!book.bookmarked" (click)="bookmark()"  class="btn btn-primary m-1 flex-grow-1">
