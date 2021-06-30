@@ -10,6 +10,7 @@ export class Chapter{
   total_chapters?:number;
 }
 export class ChapterSimple{
+  id?: number;
   title!: string;
   release!: string;
   number?: number;

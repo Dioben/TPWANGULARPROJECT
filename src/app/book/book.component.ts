@@ -8,6 +8,8 @@ import {Review} from "../../data/review";
 import {ChapterService} from "../chapter.service";
 import {ChapterPOST} from "../../data/chapterPOST";
 import Utils from "../utils";
+import {Chapter, ChapterSimple} from "../../data/chapter";
+import {Book} from "../../data/book";
 
 @Component({
   selector: 'app-book',
@@ -25,11 +27,14 @@ export class BookComponent implements OnInit {
   isEditingBook:boolean=false;
   isCreatingChapter:boolean=false;
   formatDate = Utils.formatDate;
+  editableMap: Map<ChapterSimple,boolean> = new Map<ChapterSimple,boolean>();
+  isEditingChapter:boolean=false;
 
   constructor(private auth:UserService,
               private route:ActivatedRoute,
               private location:Location,
-              private bookService:BookService) {
+              private bookService:BookService,
+              private chapterService:ChapterService) {
     this.loggedin = auth.authenticated;
     this.isadmin=auth.userIsStaff;
     auth.authenticatedChange.subscribe(value => this.handleLoginChange(value));
@@ -132,5 +137,24 @@ export class BookComponent implements OnInit {
       this.reviews!.splice(i, 1);
       this.book.self_review = undefined;
     });
+  }
+
+  public deleteChapter(id:number) {
+    this.chapterService.deleteChapter(id).subscribe(value => {
+      let i = this.book.chapters.findIndex((chapter) => {
+        return chapter.id == id;
+      })
+      let chapter = this.book.chapters[i]
+      this.book.chapters.forEach(item => {
+        if (item.number! > chapter.number!) item.number!--;
+      })
+      this.book.chapters.splice(i, 1);
+
+    });
+  }
+
+  toggleEditor(chapter:ChapterSimple){
+    this.isEditingChapter = !this.editableMap.get(chapter);
+    this.editableMap.set(chapter, this.isEditingChapter);
   }
 }

@@ -18,13 +18,14 @@ export class ChapterComponent implements OnInit {
   isadmin:boolean=false; //allow delete
   chapter?:ChapterFullView;
   chapterNum?:number;
-  authorId?:number;
   bookId?:number;
   page:number=1;
   maxpages:number=1;
   outercomments?: Comment[];
   innercomments?:Comment[];
   userId: number|null;
+  isEditingChapter:boolean = false;
+
   constructor(private auth:UserService,private route:ActivatedRoute,private location:Location,private chapterService:ChapterService) {
     this.loggedin=auth.authenticated;
     this.isadmin=auth.userIsStaff;
@@ -39,7 +40,6 @@ export class ChapterComponent implements OnInit {
   private handleLoginChange(value: boolean) {
     this.loggedin=value;
     if (this.loggedin){
-      this.isauthor = this.auth.user_id==this.authorId;
       this.userId=this.auth.user_id;
       this.isadmin=this.auth.userIsStaff
     }else {
@@ -73,10 +73,6 @@ export class ChapterComponent implements OnInit {
         this.getChapter();
       }
     })
-  }
-
-  toggleEdit() {
-
   }
 
   deleteChapter() {
@@ -123,6 +119,7 @@ export class ChapterComponent implements OnInit {
   private getChapter() {
     this.chapterService.getChapter(this.bookId!,this.chapterNum!).subscribe(value => {
       this.chapter=value; this.maxpages=value.pages!;
+      this.isauthor = this.auth.user_id==value.author!.id;
       if (this.page==1){
         this.outercomments = value.comments!.filter(value1 => value1.parent==null);
         this.innercomments = value.comments!.filter(value1 => value1.parent!=null);
@@ -131,5 +128,13 @@ export class ChapterComponent implements OnInit {
         this.loadComments();
       }
     });
+  }
+
+  public startEditChapter() {
+    this.isEditingChapter = true;
+  }
+
+  public stopEditChapter() {
+    this.isEditingChapter = false;
   }
 }

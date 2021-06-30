@@ -6,19 +6,18 @@
                     <a (click)="stopCreateChapter()" style="cursor: pointer"><i class="fa fa-arrow-left"></i> Back</a>
                 </span>
                 <div class="separator my-2"></div>
-                <span>
-                    Chapter creation
-                </span>
+                <span *ngIf="!chapter.id">Chapter creation</span>
+                <span *ngIf="chapter.id">Editing chapter: {{chapter.title}}</span>
             </div>
             <div class="chapter-content-content">
-                <form #chapterCreate="ngForm" (ngSubmit)="createChapter(chapterCreate.value)">
+                <form #chapterForm="ngForm" (ngSubmit)="submitChapter(chapterForm.value)">
                     <div class="form-group">
                         <label class="form-label" for="create-chapter-title">Title:</label>
-                        <input name="title" class="form-control" id="create-chapter-title" ngModel>
+                        <input name="title" class="form-control" id="create-chapter-title" [ngModel]="chapter.title">
                     </div>
                     <div class="form-group mb-1">
                         <label class="form-label" for="create-chapter-text">Content:</label>
-                        <textarea style="min-height: 600px" name="text" class="form-control" id="create-chapter-text" ngModel></textarea>
+                        <textarea style="min-height: 600px" name="text" class="form-control" id="create-chapter-text" [ngModel]="chapter.text"></textarea>
                     </div>
                     <div class="d-flex justify-content-center mt-2">
                         <button type="submit" class="btn btn-primary">Submit</button>

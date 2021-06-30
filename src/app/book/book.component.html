@@ -1,6 +1,6 @@
 <ng-template #noReviews> <span>No reviews yet!</span></ng-template>
 
-<div *ngIf="!isCreatingChapter" class="col">
+<div *ngIf="!isCreatingChapter && !isEditingChapter" class="col">
     <div class="book-header col">
         <div class="d-flex">
             <img class="align-self-center mr-3 mt-3 mb-3 book-big-img">
@@ -50,8 +50,8 @@
                         </div>
                         <div class="separator-thin"></div>
                     </div>
-                    <a *ngIf="isauthor" class="btn btn-primary btn-sm ml-2 mt-3 mb-2">Edit</a>
-                    <a *ngIf="isauthor||isadmin" class="btn btn-danger btn-sm ml-2 mt-3 mb-2">Delete</a>
+                    <button *ngIf="isauthor" (click)="toggleEditor(chapter)" class="btn btn-primary btn-sm ml-2 mt-3 mb-2">Edit</button>
+                    <button *ngIf="isauthor||isadmin" (click)="deleteChapter(chapter.id!)" class="btn btn-danger btn-sm ml-2 mt-3 mb-2">Delete</button>
                 </div>
             </div>
         </div>
@@ -142,4 +142,9 @@
     </div>
 </div>
 
-<app-chapter-editor *ngIf="isCreatingChapter" [bookId]="bookId" (stopCreateChapterEvent)="stopCreateChapter()"></app-chapter-editor>
+<app-chapter-editor *ngIf="isCreatingChapter" [chapterList]="book.chapters" [bookId]="bookId!" (stopCreateChapterEvent)="stopCreateChapter()"></app-chapter-editor>
+
+
+<div *ngFor="let chapter of book.chapters">
+    <app-chapter-editor *ngIf="editableMap.get(chapter)" [chapterSimple]="chapter" [chapterList]="book.chapters" [bookId]="bookId!" (stopCreateChapterEvent)="toggleEditor(chapter)"></app-chapter-editor>
+</div>

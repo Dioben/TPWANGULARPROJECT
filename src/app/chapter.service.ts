@@ -27,16 +27,16 @@ export class ChapterService {
     return this.http.get<Comment[]>(url,this.auth.httpOptions);
   }
 
-  postChapter(chapter:ChapterPOST):Observable<any>{
+  postChapter(chapter:ChapterPOST):Observable<Chapter>{
     //data structures does not allow me to test if author, oh well django does it anyway
     if(!this.auth.authenticated){throw new Error("Anon cannot post chapters");}
     let url:string = BASE_DJANGO_URL+"chapterPost/";
-    return this.http.post(url,chapter,this.auth.httpOptions);
+    return this.http.post<Chapter>(url,chapter,this.auth.httpOptions);
   }
-  editChapter(chapter:Chapter):Observable<any>{
+  editChapter(chapter:Chapter):Observable<Chapter>{
     if(!this.auth.authenticated){throw new Error("Anon cannot edit chapters");}
     let url:string = BASE_DJANGO_URL+"chapterEdit/";
-    return this.http.put(url,chapter,this.auth.httpOptions);
+    return this.http.put<Chapter>(url,chapter,this.auth.httpOptions);
   }
   deleteChapter(chapterId:number):Observable<any>{
     if(!this.auth.authenticated){throw new Error("Anon cannot delete chapters");}
