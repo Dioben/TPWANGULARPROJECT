@@ -17,6 +17,7 @@ import Utils from "../utils";
 export class BookComponent implements OnInit {
   loggedin:boolean; //allow review
   isauthor:boolean=false; //allow edit
+  isadmin:boolean=false; //allow delete
   book!:BookFullView;
   bookId?:number;
   reviews?:Review[];
@@ -28,9 +29,9 @@ export class BookComponent implements OnInit {
   constructor(private auth:UserService,
               private route:ActivatedRoute,
               private location:Location,
-              private bookService:BookService,
-              private chapterService:ChapterService) {
+              private bookService:BookService) {
     this.loggedin = auth.authenticated;
+    this.isadmin=auth.userIsStaff;
     auth.authenticatedChange.subscribe(value => this.handleLoginChange(value));
     this.loadBook();
   }
@@ -43,6 +44,9 @@ export class BookComponent implements OnInit {
 
   private handleLoginChange(value: boolean) {
     this.loggedin=value;
+    this.isadmin=this.auth.userIsStaff;
+    if(!this.loggedin){this.isauthor=false;}
+    if(this.loggedin && this.book){this.isauthor = this.auth.user_id==this.book.book.author}
   }
 
   private loadBook() {
@@ -123,8 +127,8 @@ export class BookComponent implements OnInit {
     });
   }
 
-  public deleteReview() {
-    this.bookService.deleteReview(this.bookId!).subscribe(value => {
+  public deleteReview(review:Review) {
+    this.bookService.deleteReview(review.id!).subscribe(value => {
       let i = this.reviews!.findIndex((review) => {
         return review.author == this.book.self_review!.author;
       });
