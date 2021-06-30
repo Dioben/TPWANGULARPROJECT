@@ -83,8 +83,20 @@ export class ChapterComponent implements OnInit {
     this.chapterService.deleteChapter(this.chapter!.chapter.id).subscribe(value => this.location.back())
   }
 
-  deleteComment(commentlayer1: Comment) {
-
+  deleteComment(comment: Comment) {
+    this.chapterService.commentDelete(comment.id).subscribe(value => {
+      if (comment.parent) {
+        let i = this.innercomments!.findIndex((item) => {
+          return item.id == comment.id;
+        });
+        this.innercomments!.splice(i, 1);
+      } else {
+        let i = this.outercomments!.findIndex((item) => {
+          return item.id == comment.id;
+        })
+        this.outercomments!.splice(i, 1);
+      }
+    });
   }
 
   postComment(text:string, id:number|null=null) {
