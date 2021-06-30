@@ -149,7 +149,7 @@ export class BookComponent implements OnInit {
         if (item.number! > chapter.number!) item.number!--;
       })
       this.book.chapters.splice(i, 1);
-
+      if (this.book.lastread! > i) this.book.lastread!--;
     });
   }
 
