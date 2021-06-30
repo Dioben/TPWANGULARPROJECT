@@ -26,9 +26,10 @@ export class BookEditorComponent implements OnInit {
     this.stopEditBookEvent.emit();
   }
 
-  private editBook(data:{"title":string, "description":string}) {
+  private editBook(data:{"title":string, "description":string,"cover":string}) {
     this.book.title = data.title;
     this.book.description = data.description;
+    if (data.cover!=""){this.book.cover=data.cover;}
     this.bookService.editBook(this.book).subscribe(value => {
       if (this.bookList) {
         let i = this.bookList.findIndex((book) => {
@@ -42,10 +43,12 @@ export class BookEditorComponent implements OnInit {
     });
   }
 
-  private createBook(data:{title: string, description:string}) {
+  private createBook(data:{title: string, description:string,"cover":string}) {
     let bookPost = new BookPOST();
     bookPost.title = data.title;
     bookPost.description = data.description;
+    console.log(data['cover'])
+    if (data.cover!=""){this.book.cover=data.cover;}
     this.bookService.postBook(bookPost).subscribe(value => {
       this.book = value;
       if (this.bookList) {
@@ -57,7 +60,7 @@ export class BookEditorComponent implements OnInit {
     })
   }
 
-  public submitBook(data:{title: string, description:string}) {
+  public submitBook(data:{title: string, description:string,cover:string}) {
     if (this.book.id) this.editBook(data);
     else this.createBook(data);
   }
