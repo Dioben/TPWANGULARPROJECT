@@ -94,9 +94,9 @@ export class ChapterComponent implements OnInit {
     commentPost.content = text;
     this.chapterService.commentPost(commentPost).subscribe(value => {
       if (value.parent == null) {
-        this.outercomments!.push(value);
+        this.outercomments!.unshift(value);
       } else {
-        this.innercomments!.push(value);
+        this.innercomments!.unshift(value);
       }
     });
   }
