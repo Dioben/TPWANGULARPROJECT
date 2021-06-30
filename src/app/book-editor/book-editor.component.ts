@@ -47,8 +47,7 @@ export class BookEditorComponent implements OnInit {
     let bookPost = new BookPOST();
     bookPost.title = data.title;
     bookPost.description = data.description;
-    console.log(data['cover'])
-    if (data.cover!=""){this.book.cover=data.cover;}
+    if (data.cover!=""){bookPost.cover=data.cover;}
     this.bookService.postBook(bookPost).subscribe(value => {
       this.book = value;
       if (this.bookList) {
