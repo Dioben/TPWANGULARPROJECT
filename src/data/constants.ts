@@ -1,1 +1,1 @@
-export const BASE_DJANGO_URL = "http://localhost:8000/api/";
+export const BASE_DJANGO_URL = "http://plaranjinha.pythonanywhere.com/api/";
