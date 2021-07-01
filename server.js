@@ -2,10 +2,10 @@ const express = require("express");
 
 const app = express();
 
-app.use(express.static("./dist/tpw-project"));
+app.use(express.static("./dist/tpwproject"));
 
 app.get("/*", function (req, res) {
-  res.sendFile("index.html", { root: "dist/tpw-project" });
+  res.sendFile("index.html", { root: "dist/tpwproject" });
 });
 
 app.listen(process.env.PORT || 8080);
