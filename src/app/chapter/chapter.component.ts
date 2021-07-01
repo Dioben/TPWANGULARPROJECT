@@ -6,6 +6,7 @@ import {Location} from "@angular/common";
 import {ChapterService} from "../chapter.service";
 import {Comment} from "../../data/comment";
 import {CommentPOST} from "../../data/commentPOST";
+import Utils from "../utils";
 
 @Component({
   selector: 'app-chapter',
@@ -25,6 +26,7 @@ export class ChapterComponent implements OnInit {
   innercomments?:Comment[];
   userId: number|null;
   isEditingChapter:boolean = false;
+  formatDate = Utils.formatDate;
 
   constructor(private auth:UserService,private route:ActivatedRoute,private location:Location,private chapterService:ChapterService, private router:Router) {
     this.loggedin=auth.authenticated;

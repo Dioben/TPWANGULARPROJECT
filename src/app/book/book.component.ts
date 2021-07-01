@@ -123,7 +123,7 @@ export class BookComponent implements OnInit {
         });
         this.reviews![i] = value;
       } else {
-        this.reviews!.push(value);
+        this.reviews!.unshift(value);
       }
       this.book.self_review = value;
     });
@@ -131,8 +131,8 @@ export class BookComponent implements OnInit {
 
   public deleteReview(review:Review) {
     this.bookService.deleteReview(review.id!).subscribe(value => {
-      let i = this.reviews!.findIndex((review) => {
-        return review.author == review!.author;
+      let i = this.reviews!.findIndex((item) => {
+        return item.author == review!.author;
       });
       this.reviews!.splice(i, 1);
       this.book.self_review = undefined;

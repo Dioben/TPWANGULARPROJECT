@@ -75,14 +75,14 @@
         <div class="d-flex flex-column" *ngFor="let commentlayer1 of outercomments" >
           <div class="d-flex justify-content-between">
             <span><b>{{ commentlayer1.author_name }}</b></span>
-            <span><small>{{ commentlayer1.release }}</small></span>
+            <span><small>{{ formatDate(commentlayer1.release!) }}</small></span>
           </div>
           <div class="mt-1">
             {{ commentlayer1.content }}
           </div>
-          <div class="d-flex justify-content-end mb-2" *ngIf="loggedin">
-            <button class="btn btn-primary btn-sm" data-toggle="collapse" [attr.data-target]="'#comment'+commentlayer1.id" aria-expanded="false" [attr.aria-controls]="'comment'+commentlayer1.id">Reply</button>
-              <button class="btn btn-danger btn-sm ml-1" (click)="deleteComment(commentlayer1)" *ngIf="userId==commentlayer1.author || isadmin">Delete</button>
+          <div class="d-flex justify-content-end mb-2">
+              <button *ngIf="loggedin" class="btn btn-primary btn-sm" data-toggle="collapse" [attr.data-target]="'#comment'+commentlayer1.id" aria-expanded="false" [attr.aria-controls]="'comment'+commentlayer1.id">Reply</button>
+              <button class="btn btn-danger btn-sm ml-1" (click)="deleteComment(commentlayer1)" *ngIf="loggedin && (userId==commentlayer1.author || isadmin)">Delete</button>
             <div style="height: 30px"></div>
           </div>
           <div class="collapse" id="comment{{ commentlayer1.id }}">
@@ -100,13 +100,13 @@
               <div *ngIf="commentlayer1.id==childcomment.parent"><!--- >added this in, maybe it messes with formatting ,idk<-->
               <div class="d-flex justify-content-between">
                 <span><b>{{ childcomment.author_name }}</b></span>
-                <span><small>{{ childcomment.release }}</small></span>
+                <span><small>{{ formatDate(childcomment.release!) }}</small></span>
               </div>
               <div class="mt-1">
                 {{ childcomment.content }}
               </div>
-              <div class="d-flex justify-content-end mb-2" *ngIf="userId==childcomment.author || isadmin">
-                  <button class="btn btn-danger btn-sm ml-1" (click)="deleteComment(childcomment)">Delete</button>
+              <div class="d-flex justify-content-end mb-2">
+                  <button *ngIf="loggedin && (userId==childcomment.author || isadmin)" class="btn btn-danger btn-sm ml-1" (click)="deleteComment(childcomment)">Delete</button>
               </div>
               <div class="mb-5"></div>
             </div>
