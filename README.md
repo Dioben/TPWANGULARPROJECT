@@ -1,5 +1,6 @@
 # Tpwproject
 
+This project depends on the API developed [here](https://github.com/buckaroo69/TPW01)
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.0.
 
 ## Development server
